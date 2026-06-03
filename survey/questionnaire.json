@@ -1,0 +1,342 @@
+{
+  "meta": {
+    "id": "elder_digital_2026",
+    "title": "老年人智能技术使用情况调查问卷",
+    "description": "本问卷旨在了解老年朋友使用智能手机、移动支付、数字医疗等智能技术的真实情况与困难，为适老化改造提供依据。",
+    "version": "1.0.0",
+    "author": "适老化调研课题组",
+    "created_at": "2026-06-03",
+    "estimated_minutes": 8
+  },
+  "settings": {
+    "show_progress": true,
+    "allow_back": true,
+    "shuffle": false,
+    "submit_target": "END"
+  },
+  "questions": [
+    {
+      "id": "Q1",
+      "type": "single",
+      "title": "请问您的年龄段是？",
+      "description": "请选择最符合您实际情况的一项。",
+      "required": true,
+      "default": null,
+      "help": "如果记不清准确年龄，选择大概的范围即可。",
+      "voice_text": "请问您的年龄段是？可以选择六十岁以下，六十到六十九岁，七十到七十九岁，八十岁及以上。",
+      "options": [
+        {"value": "below_60", "label": "60岁以下"},
+        {"value": "60_69", "label": "60到69岁"},
+        {"value": "70_79", "label": "70到79岁"},
+        {"value": "above_80", "label": "80岁及以上"}
+      ],
+      "logic": []
+    },
+    {
+      "id": "Q2",
+      "type": "single",
+      "title": "请问您的性别是？",
+      "description": "",
+      "required": true,
+      "default": null,
+      "help": "",
+      "voice_text": "请问您的性别是？男，还是女？",
+      "options": [
+        {"value": "male", "label": "男"},
+        {"value": "female", "label": "女"}
+      ],
+      "logic": []
+    },
+    {
+      "id": "Q3",
+      "type": "single",
+      "title": "您目前的居住情况是？",
+      "description": "",
+      "required": true,
+      "default": null,
+      "help": "",
+      "voice_text": "您目前的居住情况是？和子女同住，与老伴同住，独居，还是住在养老机构？",
+      "options": [
+        {"value": "with_children", "label": "与子女同住"},
+        {"value": "with_spouse", "label": "与老伴同住"},
+        {"value": "alone", "label": "独居"},
+        {"value": "institution", "label": "养老机构"}
+      ],
+      "logic": []
+    },
+    {
+      "id": "Q4",
+      "type": "single",
+      "title": "您的文化程度是？",
+      "description": "",
+      "required": true,
+      "default": null,
+      "help": "",
+      "voice_text": "您的文化程度是？小学及以下，初中，高中或中专，大专及以上？",
+      "options": [
+        {"value": "primary", "label": "小学及以下"},
+        {"value": "junior", "label": "初中"},
+        {"value": "senior", "label": "高中或中专"},
+        {"value": "college", "label": "大专及以上"}
+      ],
+      "logic": []
+    },
+    {
+      "id": "Q5",
+      "type": "yesno",
+      "title": "您平时使用智能手机吗？",
+      "description": "智能手机是指可以上网、安装App的触屏手机。",
+      "required": true,
+      "default": null,
+      "help": "如果只用老人机打电话，请选择“否”。",
+      "voice_text": "您平时使用智能手机吗？智能手机是指可以上网、安装应用的触屏手机。",
+      "options": [
+        {"value": "yes", "label": "是"},
+        {"value": "no", "label": "否"}
+      ],
+      "logic": [
+        {"op": "equals", "value": "no", "goto": "Q14"}
+      ]
+    },
+    {
+      "id": "Q6",
+      "type": "single",
+      "title": "您平均每天使用智能手机多长时间？",
+      "description": "",
+      "required": true,
+      "default": null,
+      "help": "",
+      "voice_text": "您平均每天使用智能手机多长时间？一小时以内，一到三小时，三到五小时，还是五小时以上？",
+      "options": [
+        {"value": "lt1", "label": "1小时以内"},
+        {"value": "1_3", "label": "1到3小时"},
+        {"value": "3_5", "label": "3到5小时"},
+        {"value": "gt5", "label": "5小时以上"}
+      ],
+      "logic": []
+    },
+    {
+      "id": "Q7",
+      "type": "multiple",
+      "title": "您在使用智能手机时遇到过哪些困难？",
+      "description": "可以选择多项。",
+      "required": false,
+      "default": null,
+      "help": "把您遇到过的困难都选上，可以多选。",
+      "voice_text": "您在使用智能手机时遇到过哪些困难？可以多选：字太小看不清，操作太复杂，担心被骗，容易点错，记不住步骤，或者没有遇到困难。",
+      "options": [
+        {"value": "font_small", "label": "字太小看不清"},
+        {"value": "too_complex", "label": "操作太复杂"},
+        {"value": "fear_scam", "label": "担心被骗"},
+        {"value": "misclick", "label": "容易点错"},
+        {"value": "forget_steps", "label": "记不住操作步骤"},
+        {"value": "none", "label": "没有遇到困难"}
+      ],
+      "logic": []
+    },
+    {
+      "id": "Q8",
+      "type": "yesno",
+      "title": "您会使用微信和家人朋友聊天吗？",
+      "description": "",
+      "required": true,
+      "default": null,
+      "help": "",
+      "voice_text": "您会使用微信和家人朋友聊天吗？",
+      "options": [
+        {"value": "yes", "label": "是"},
+        {"value": "no", "label": "否"}
+      ],
+      "logic": []
+    },
+    {
+      "id": "Q9",
+      "type": "single",
+      "title": "您使用手机支付（如微信、支付宝）的频率是？",
+      "description": "比如买菜、缴费时扫码付款。",
+      "required": true,
+      "default": null,
+      "help": "",
+      "voice_text": "您使用手机支付，比如微信、支付宝扫码付款的频率是？从来不用，偶尔使用，经常使用，还是每天都用？",
+      "options": [
+        {"value": "never", "label": "从来不用"},
+        {"value": "rarely", "label": "偶尔使用"},
+        {"value": "often", "label": "经常使用"},
+        {"value": "daily", "label": "每天都用"}
+      ],
+      "logic": []
+    },
+    {
+      "id": "Q10",
+      "type": "yesno",
+      "title": "您会自己在网上挂号或使用医院的健康App吗？",
+      "description": "例如网上预约挂号、查看检查报告。",
+      "required": true,
+      "default": null,
+      "help": "",
+      "voice_text": "您会自己在网上挂号，或者使用医院的健康应用吗？比如网上预约挂号、查看检查报告。",
+      "options": [
+        {"value": "yes", "label": "是"},
+        {"value": "no", "label": "否"}
+      ],
+      "logic": [
+        {"op": "equals", "value": "no", "goto": "Q12"}
+      ]
+    },
+    {
+      "id": "Q11",
+      "type": "rating",
+      "title": "您觉得使用数字医疗服务（挂号、查报告）容易吗？",
+      "description": "请打分，1分表示很困难，5分表示很容易。",
+      "required": true,
+      "default": 3,
+      "scale": 5,
+      "min_label": "很困难",
+      "max_label": "很容易",
+      "help": "星星越多表示越容易。",
+      "voice_text": "您觉得使用数字医疗服务容易吗？请打分，一分表示很困难，五分表示很容易。",
+      "options": [],
+      "logic": []
+    },
+    {
+      "id": "Q12",
+      "type": "yesno",
+      "title": "您会和家人进行手机视频通话吗？",
+      "description": "",
+      "required": true,
+      "default": null,
+      "help": "",
+      "voice_text": "您会和家人进行手机视频通话吗？",
+      "options": [
+        {"value": "yes", "label": "是"},
+        {"value": "no", "label": "否"}
+      ],
+      "logic": []
+    },
+    {
+      "id": "Q13",
+      "type": "rating",
+      "title": "您对网络诈骗的防范意识有多强？",
+      "description": "1分表示完全不了解，5分表示非常警惕。",
+      "required": true,
+      "default": 3,
+      "scale": 5,
+      "min_label": "完全不了解",
+      "max_label": "非常警惕",
+      "help": "星星越多表示您越警惕、越不容易上当。",
+      "voice_text": "您对网络诈骗的防范意识有多强？一分表示完全不了解，五分表示非常警惕。",
+      "options": [],
+      "logic": []
+    },
+    {
+      "id": "Q14",
+      "type": "single",
+      "title": "当您在使用智能设备遇到困难时，通常怎么办？",
+      "description": "",
+      "required": true,
+      "default": null,
+      "help": "",
+      "voice_text": "当您在使用智能设备遇到困难时，通常怎么办？问子女或晚辈，问朋友邻居，自己慢慢摸索，还是干脆放弃不用？",
+      "options": [
+        {"value": "ask_children", "label": "问子女或晚辈"},
+        {"value": "ask_friends", "label": "问朋友邻居"},
+        {"value": "self_explore", "label": "自己慢慢摸索"},
+        {"value": "give_up", "label": "干脆放弃不用"}
+      ],
+      "logic": []
+    },
+    {
+      "id": "Q15",
+      "type": "multiple",
+      "title": "您最希望智能设备在哪些方面做出改进？",
+      "description": "可以选择多项。",
+      "required": false,
+      "default": null,
+      "help": "选出您最想改进的方面，可以多选。",
+      "voice_text": "您最希望智能设备在哪些方面做出改进？可以多选：字体更大，操作更简单，增加语音助手，加强防骗提醒，提供专人指导。",
+      "options": [
+        {"value": "bigger_font", "label": "字体更大"},
+        {"value": "simpler", "label": "操作更简单"},
+        {"value": "voice_assist", "label": "增加语音助手"},
+        {"value": "anti_scam", "label": "加强防骗提醒"},
+        {"value": "human_help", "label": "提供专人指导"}
+      ],
+      "logic": []
+    },
+    {
+      "id": "Q16",
+      "type": "rating",
+      "title": "您对目前手机App字体大小的满意程度？",
+      "description": "1分表示很不满意，5分表示很满意。",
+      "required": true,
+      "default": 3,
+      "scale": 5,
+      "min_label": "很不满意",
+      "max_label": "很满意",
+      "help": "",
+      "voice_text": "您对目前手机应用字体大小的满意程度？一分表示很不满意，五分表示很满意。",
+      "options": [],
+      "logic": []
+    },
+    {
+      "id": "Q17",
+      "type": "yesno",
+      "title": "如果智能设备能用语音操作，您会更愿意使用吗？",
+      "description": "例如对手机说话就能完成操作。",
+      "required": true,
+      "default": null,
+      "help": "",
+      "voice_text": "如果智能设备能用语音操作，比如对手机说话就能完成操作，您会更愿意使用吗？",
+      "options": [
+        {"value": "yes", "label": "是"},
+        {"value": "no", "label": "否"}
+      ],
+      "logic": []
+    },
+    {
+      "id": "Q18",
+      "type": "single",
+      "title": "总体来说，您对使用智能技术的态度是？",
+      "description": "",
+      "required": true,
+      "default": null,
+      "help": "",
+      "voice_text": "总体来说，您对使用智能技术的态度是？很乐意学习，愿意但有顾虑，不太愿意，还是完全抗拒？",
+      "options": [
+        {"value": "eager", "label": "很乐意学习"},
+        {"value": "willing", "label": "愿意但有顾虑"},
+        {"value": "reluctant", "label": "不太愿意"},
+        {"value": "resist", "label": "完全抗拒"}
+      ],
+      "logic": []
+    },
+    {
+      "id": "Q19",
+      "type": "number",
+      "title": "在您家人中，平时有几位会帮助您使用智能设备？",
+      "description": "请填写人数。",
+      "required": false,
+      "default": 0,
+      "min": 0,
+      "max": 20,
+      "unit": "位",
+      "help": "填写大概的人数即可。",
+      "voice_text": "在您家人中，平时有几位会帮助您使用智能设备？请说出人数。",
+      "options": [],
+      "logic": []
+    },
+    {
+      "id": "Q20",
+      "type": "text",
+      "title": "您对适老化智能服务还有哪些建议或期望？",
+      "description": "可以说说您的想法，也可以不填。",
+      "required": false,
+      "default": "",
+      "max_length": 200,
+      "help": "想到什么说什么，没有也可以跳过。",
+      "voice_text": "您对适老化智能服务还有哪些建议或期望？可以说说您的想法，也可以跳过不填。",
+      "options": [],
+      "logic": []
+    }
+  ]
+}

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>问卷设计器 · ElderAI Survey Builder</title>
+  <link rel="stylesheet" href="builder.css">
+</head>
+<body>
+  <!-- ===== 顶部工具栏 ===== -->
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo">📝</span>
+      <div>
+        <div class="brand-title">问卷设计器</div>
+        <div class="brand-sub">ElderAI Survey Builder</div>
+      </div>
+    </div>
+    <div class="toolbar">
+      <button class="btn" id="btnMeta" title="编辑问卷标题与说明">⚙️ 问卷信息</button>
+      <button class="btn" id="btnImport" title="导入已有问卷 JSON">📥 导入</button>
+      <button class="btn" id="btnFlow" title="查看自动生成的流程图">🔀 流程图</button>
+      <button class="btn" id="btnValidate" title="保存前自动校验">✅ 校验</button>
+      <button class="btn btn-accent" id="btnPreview" title="模拟真实答题">▶ 预览</button>
+      <button class="btn btn-primary" id="btnExport" title="校验通过后生成 questionnaire.json">💾 导出 JSON</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <!-- ===== 左侧题目列表 ===== -->
+    <aside class="sidebar">
+      <div class="sidebar-head">
+        <span id="surveyTitleMini">未命名问卷</span>
+        <span class="qcount" id="qcount">0 题</span>
+      </div>
+
+      <div class="add-group">
+        <button class="btn btn-add" id="btnAddMenu">＋ 新增题目 ▾</button>
+        <div class="add-menu hidden" id="addMenu">
+          <div data-type="single">◉ 单选题</div>
+          <div data-type="multiple">☑ 多选题</div>
+          <div data-type="yesno">⚖ 是否题</div>
+          <div data-type="rating">★ 评分题</div>
+          <div data-type="text">✎ 文本题</div>
+          <div data-type="number">№ 数字题</div>
+          <div data-type="date">📅 日期题</div>
+        </div>
+      </div>
+
+      <ul class="qlist" id="qlist"><!-- 动态渲染 --></ul>
+
+      <div class="sidebar-foot">
+        <small>拖动题目可调整顺序</small>
+      </div>
+    </aside>
+
+    <!-- ===== 右侧编辑区 ===== -->
+    <section class="editor" id="editor">
+      <div class="empty-hint" id="emptyHint">
+        <div class="empty-emoji">🧓📋</div>
+        <h2>开始设计适老化问卷</h2>
+        <p>点击左上角「＋ 新增题目」添加第一道题；<br>题目、逻辑跳转都可视化编辑，无需手写 JSON。</p>
+        <p class="muted">支持单选 / 多选 / 是否 / 评分 / 文本 / 数字 / 日期 共 7 种题型</p>
+      </div>
+      <!-- 题目编辑表单动态注入 -->
+    </section>
+  </main>
+
+  <!-- ===== 弹窗：问卷信息 ===== -->
+  <div class="modal hidden" id="modalMeta">
+    <div class="modal-card">
+      <div class="modal-head"><h3>⚙️ 问卷信息</h3><button class="x" data-close>✕</button></div>
+      <div class="modal-body">
+        <label>问卷标题<input id="metaTitle" type="text" placeholder="例：老年人智能技术使用情况调查问卷"></label>
+        <label>问卷说明<textarea id="metaDesc" rows="3" placeholder="一句话介绍问卷目的"></textarea></label>
+        <div class="row">
+          <label>版本<input id="metaVersion" type="text" placeholder="1.0.0"></label>
+          <label>作者<input id="metaAuthor" type="text" placeholder="课题组"></label>
+          <label>预计时长(分钟)<input id="metaMinutes" type="number" min="1" placeholder="8"></label>
+        </div>
+        <div class="row">
+          <label class="check"><input id="metaProgress" type="checkbox" checked> 显示进度条</label>
+          <label class="check"><input id="metaBack" type="checkbox" checked> 允许返回上一题</label>
+        </div>
+      </div>
+      <div class="modal-foot"><button class="btn btn-primary" data-close>确定</button></div>
+    </div>
+  </div>
+
+  <!-- ===== 弹窗：导入 ===== -->
+  <div class="modal hidden" id="modalImport">
+    <div class="modal-card">
+      <div class="modal-head"><h3>📥 导入问卷</h3><button class="x" data-close>✕</button></div>
+      <div class="modal-body">
+        <p class="muted">选择本地 questionnaire.json，或将 JSON 粘贴到下方文本框。</p>
+        <input type="file" id="importFile" accept="application/json,.json">
+        <textarea id="importText" rows="10" placeholder='在此粘贴 JSON…'></textarea>
+      </div>
+      <div class="modal-foot">
+        <button class="btn" data-close>取消</button>
+        <button class="btn btn-primary" id="btnDoImport">导入</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 弹窗：校验结果 ===== -->
+  <div class="modal hidden" id="modalValidate">
+    <div class="modal-card">
+      <div class="modal-head"><h3>✅ 校验结果</h3><button class="x" data-close>✕</button></div>
+      <div class="modal-body"><div id="validateBody"></div></div>
+      <div class="modal-foot"><button class="btn btn-primary" data-close>知道了</button></div>
+    </div>
+  </div>
+
+  <!-- ===== 弹窗：流程图 ===== -->
+  <div class="modal hidden" id="modalFlow">
+    <div class="modal-card modal-wide">
+      <div class="modal-head"><h3>🔀 问卷流程图</h3><button class="x" data-close>✕</button></div>
+      <div class="modal-body"><div id="flowBody" class="flow-canvas"></div></div>
+      <div class="modal-foot"><button class="btn btn-primary" data-close>关闭</button></div>
+    </div>
+  </div>
+
+  <!-- ===== 弹窗：预览（模拟答题） ===== -->
+  <div class="modal hidden" id="modalPreview">
+    <div class="modal-card modal-wide preview-card">
+      <div class="modal-head">
+        <h3>▶ 预览 · 模拟答题</h3>
+        <div>
+          <button class="btn" id="btnSpeak" title="朗读本题">🔊 朗读</button>
+          <button class="x" data-close>✕</button>
+        </div>
+      </div>
+      <div class="modal-body"><div id="previewBody" class="preview-body"></div></div>
+      <div class="modal-foot preview-foot">
+        <button class="btn" id="btnPrevQ">← 上一题</button>
+        <span id="previewProgress" class="muted"></span>
+        <button class="btn btn-primary" id="btnNextQ">下一题 →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 全局提示条 ===== -->
+  <div class="toast hidden" id="toast"></div>
+
+  <!-- ===== 作者署名 ===== -->
+  <div class="credit-badge">
+    Jiacheng Zheng · 使用 Claude Code 辅助开发 ·
+    <a href="https://karcen.github.io/zhengjiacheng.github.io/" target="_blank" rel="noopener">联系我</a>
+  </div>
+
+  <script src="builder.js"></script>
+</body>
+</html>
