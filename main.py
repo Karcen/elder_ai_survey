@@ -59,6 +59,19 @@ def load_config(config_path: Optional[Path] = None) -> Dict[str, Any]:
     return {}
 
 
+def save_config(config: Dict[str, Any], config_path: Optional[Path] = None) -> bool:
+    """把配置写回 config/config.json（用于记忆界面主题等设置）。"""
+    if config_path is None:
+        config_path = BASE_DIR / "config" / "config.json"
+    try:
+        with open(config_path, "w", encoding="utf-8") as f:
+            json.dump(config, f, ensure_ascii=False, indent=2)
+        return True
+    except OSError as exc:
+        logging.error("保存配置失败：%s", exc)
+        return False
+
+
 # ======================================================================
 # 日志系统
 # ======================================================================
@@ -97,6 +110,37 @@ def setup_logging(config: Dict[str, Any]) -> logging.Logger:
 # ======================================================================
 # 启动器主控台（tkinter）
 # ======================================================================
+# 启动器主题：亮色（默认）+ 暗色，可在界面右上角一键切换
+LAUNCHER_THEMES = {
+    "light": {
+        "bg": "#eef2f8",          # 窗口背景（浅石板）
+        "bg2": "#ffffff",         # 头部
+        "card": "#ffffff",        # 卡片背景
+        "card_hover": "#eef4ff",  # 卡片悬停
+        "border": "#dde5f0",      # 卡片描边
+        "title": "#0f172a",       # 主文字
+        "muted": "#5b6b85",       # 次文字
+        "faint": "#94a3b8",       # 弱文字
+        "accent": "#2563eb",      # 主强调色
+        "link": "#2563eb",
+        "link_hi": "#1d4ed8",
+    },
+    "dark": {
+        "bg": "#0b1220",          # 窗口背景（深石板蓝）
+        "bg2": "#0e1730",         # 头部
+        "card": "#16213a",        # 卡片背景
+        "card_hover": "#1f2d4d",  # 卡片悬停
+        "border": "#26344f",      # 卡片描边
+        "title": "#f1f5f9",       # 主文字
+        "muted": "#9aa7bd",       # 次文字
+        "faint": "#5d6e8c",       # 弱文字
+        "accent": "#38bdf8",      # 主强调色
+        "link": "#38bdf8",
+        "link_hi": "#7dd3fc",
+    },
+}
+
+
 class LauncherApp:
     """图形化主控台：一个窗口集中启动 5 大模块。
 
@@ -110,52 +154,173 @@ class LauncherApp:
         self.config = config
         self.log = logging.getLogger("launcher")
         self.tk = tk
+        # 界面主题：亮色 / 暗色（默认亮色），可在右上角切换并记忆
+        self.ui_theme = config.get("ui", {}).get("theme", "light")
+        if self.ui_theme not in LAUNCHER_THEMES:
+            self.ui_theme = "light"
+        self.lc = LAUNCHER_THEMES[self.ui_theme]
 
         self.root = tk.Tk()
         self.root.title(config.get("app", {}).get("name_zh", "适老化智能问卷平台"))
-        self.root.geometry("760x640")
-        self.root.configure(bg="#0d1b2a")
+        self.root.configure(bg=self.lc["bg"])
+        self.root.minsize(720, 640)
+        self._center(900, 810)
         self._build_ui()
+
+    def _center(self, w: int, h: int) -> None:
+        """把窗口居中显示。"""
+        self.root.update_idletasks()
+        sw = self.root.winfo_screenwidth()
+        sh = self.root.winfo_screenheight()
+        x, y = max(0, (sw - w) // 2), max(0, (sh - h) // 3)
+        self.root.geometry(f"{w}x{h}+{x}+{y}")
+
+    @staticmethod
+    def _blend(c1: str, c2: str, t: float) -> str:
+        """按比例 t 混合两个 #RRGGBB 颜色（t=0 取 c1，t=1 取 c2）。"""
+        a = [int(c1[i:i + 2], 16) for i in (1, 3, 5)]
+        b = [int(c2[i:i + 2], 16) for i in (1, 3, 5)]
+        m = [round(a[i] * (1 - t) + b[i] * t) for i in range(3)]
+        return "#%02x%02x%02x" % tuple(m)
 
     def _build_ui(self) -> None:
         tk = self.tk
+        lc = self.lc
         app_name = self.config.get("app", {}).get("name_zh", "适老化智能问卷平台")
         version = self.config.get("app", {}).get("version", "1.0.0")
 
-        tk.Label(
-            self.root, text="🧓  " + app_name, font=("Microsoft YaHei", 26, "bold"),
-            fg="#e0e1dd", bg="#0d1b2a",
-        ).pack(pady=(36, 4))
-        tk.Label(
-            self.root, text=f"ElderAI Survey Platform  v{version}",
-            font=("Arial", 13), fg="#778da9", bg="#0d1b2a",
-        ).pack(pady=(0, 28))
+        # ---- 头部 ----
+        header = tk.Frame(self.root, bg=lc["bg2"])
+        header.pack(fill="x")
+        tk.Label(header, text="🧓", font=("Arial", 40), bg=lc["bg2"], fg=lc["title"]).pack(pady=(30, 2))
+        tk.Label(header, text=app_name, font=("Microsoft YaHei", 24, "bold"),
+                 bg=lc["bg2"], fg=lc["title"]).pack()
+        tk.Label(header, text=f"ElderAI Survey Platform   ·   v{version}",
+                 font=("Arial", 12), bg=lc["bg2"], fg=lc["faint"]).pack(pady=(5, 0))
+        tk.Frame(header, bg=lc["accent"], height=3, width=68).pack(pady=(14, 22))
 
-        buttons = [
-            ("📝  问卷设计器", "管理员可视化设计问卷，生成 questionnaire.json", self.open_builder),
-            ("🧓  老人答题端", "适老化大字体、高对比、语音播报答题界面", self.open_survey),
-            ("📊  数据分析中心", "查看 / 筛选 / 统计 / 交叉分析 / 导出", self.open_analytics),
-            ("📺  科交会大屏", "全屏数据驾驶舱，自动轮播与实时刷新", self.open_dashboard),
-            ("🤖  AI分析报告", "生成调查结论、洞察并导出 Excel/PDF/Word", self.open_ai_report),
-        ]
+        # ---- 主题切换（右上角）----
+        self._theme_btn = tk.Label(
+            self.root, text=("🌙 暗色" if self.ui_theme == "light" else "☀️ 亮色"),
+            font=("Microsoft YaHei", 11, "bold"), bg=lc["card"], fg=lc["title"],
+            padx=14, pady=6, cursor="hand2", highlightthickness=1,
+            highlightbackground=lc["border"], highlightcolor=lc["border"])
+        self._theme_btn.place(relx=1.0, y=16, x=-18, anchor="ne")
+        self._theme_btn.bind("<Button-1>", lambda e: self._toggle_theme())
+        self._theme_btn.bind("<Enter>", lambda e: self._theme_btn.configure(bg=lc["card_hover"]))
+        self._theme_btn.bind("<Leave>", lambda e: self._theme_btn.configure(bg=lc["card"]))
 
-        frame = tk.Frame(self.root, bg="#0d1b2a")
-        frame.pack(expand=True, fill="both", padx=60)
-
-        for title, desc, handler in buttons:
-            btn = tk.Button(
-                frame, text=f"{title}\n{desc}", font=("Microsoft YaHei", 15, "bold"),
-                fg="#0d1b2a", bg="#e0e1dd", activebackground="#778da9",
-                relief="flat", justify="left", anchor="w", cursor="hand2",
-                command=handler,
-            )
-            btn.pack(fill="x", pady=8, ipady=10, ipadx=12)
-
-        tk.Label(
-            self.root, text="支持离线运行 · 联网增强 · 本地部署",
-            font=("Arial", 10), fg="#415a77", bg="#0d1b2a",
-        ).pack(side="bottom", pady=(0, 10))
+        # ---- 页脚（先锚定底部）----
+        tk.Label(self.root, text="支持离线运行 · 联网增强 · 本地部署",
+                 font=("Arial", 10), bg=lc["bg"], fg=lc["faint"]).pack(side="bottom", pady=(0, 12))
         self._build_credit(self.root)
+
+        # ---- 模块卡片（最后铺满中部）----
+        modules = [
+            ("📝", "问卷设计器", "管理员可视化设计问卷，生成 questionnaire.json", "#3b82f6", self.open_builder),
+            ("🧓", "老人答题端", "适老化大字体、高对比、语音播报答题界面", "#10b981", self.open_survey),
+            ("📊", "数据分析中心", "查看 · 筛选 · 统计 · 交叉分析 · 导出", "#f59e0b", self.open_analytics),
+            ("📺", "科交会大屏", "全屏数据驾驶舱，自动轮播与实时刷新", "#06b6d4", self.open_dashboard),
+            ("🤖", "AI 分析报告", "生成调查结论、洞察并导出 Excel/PDF/Word", "#a78bfa", self.open_ai_report),
+        ]
+        container = tk.Frame(self.root, bg=lc["bg"])
+        container.pack(fill="both", expand=True, padx=46)
+        for icon, title, desc, accent, handler in modules:
+            self._module_card(container, icon, title, desc, accent, handler)
+
+    def _toggle_theme(self) -> None:
+        """在亮色 / 暗色之间切换，并记忆到配置。"""
+        self.ui_theme = "dark" if self.ui_theme == "light" else "light"
+        self.lc = LAUNCHER_THEMES[self.ui_theme]
+        self.config.setdefault("ui", {})["theme"] = self.ui_theme
+        save_config(self.config)
+        self._rebuild()
+
+    def _rebuild(self) -> None:
+        """按当前主题重绘整个主控台。"""
+        for w in self.root.winfo_children():
+            w.destroy()
+        self.root.configure(bg=self.lc["bg"])
+        self._build_ui()
+
+    def _module_card(self, parent, icon: str, title: str, desc: str,
+                     accent: str, handler) -> None:
+        """模块卡片：左侧色条 + 图标 chip + 标题/描述 + 箭头，悬停整卡高亮。"""
+        tk = self.tk
+        chip = self._blend(accent, self.lc["card"], 0.72)          # 图标底色（常态）
+        chip_h = self._blend(accent, self.lc["card_hover"], 0.60)  # 图标底色（悬停）
+
+        card = tk.Frame(parent, bg=self.lc["card"], highlightthickness=1,
+                        highlightbackground=self.lc["border"], highlightcolor=self.lc["border"],
+                        cursor="hand2")
+        card.pack(fill="x", pady=7)
+
+        strip = tk.Frame(card, bg=accent, width=5)
+        strip.pack(side="left", fill="y")
+
+        chip_box = tk.Frame(card, bg=chip)
+        chip_box.pack(side="left", padx=(16, 12), pady=12)
+        icon_lbl = tk.Label(chip_box, text=icon, font=("Arial", 26), bg=chip, padx=10, pady=4)
+        icon_lbl.pack()
+
+        chevron = tk.Label(card, text="›", font=("Arial", 30, "bold"), bg=self.lc["card"], fg=accent)
+        chevron.pack(side="right", padx=20)
+
+        txt = tk.Frame(card, bg=self.lc["card"])
+        txt.pack(side="left", fill="both", expand=True, pady=12)
+        title_lbl = tk.Label(txt, text=title, font=("Microsoft YaHei", 17, "bold"),
+                             bg=self.lc["card"], fg=self.lc["title"], anchor="w")
+        title_lbl.pack(anchor="w")
+        desc_lbl = tk.Label(txt, text=desc, font=("Microsoft YaHei", 11),
+                            bg=self.lc["card"], fg=self.lc["muted"], anchor="w")
+        desc_lbl.pack(anchor="w", pady=(3, 0))
+
+        card_widgets = [card, chevron, txt, title_lbl, desc_lbl]
+        chip_widgets = [chip_box, icon_lbl]
+
+        def on() -> None:
+            for w in card_widgets:
+                w.configure(bg=self.lc["card_hover"])
+            for w in chip_widgets:
+                w.configure(bg=chip_h)
+            card.configure(highlightbackground=accent, highlightcolor=accent)
+            chevron.configure(fg=self.lc["title"])
+
+        def off() -> None:
+            for w in card_widgets:
+                w.configure(bg=self.lc["card"])
+            for w in chip_widgets:
+                w.configure(bg=chip)
+            card.configure(highlightbackground=self.lc["border"], highlightcolor=self.lc["border"])
+            chevron.configure(fg=accent)
+
+        all_widgets = [card, strip, chip_box, icon_lbl, chevron, txt, title_lbl, desc_lbl]
+        self._hover_bind(card, all_widgets, on, off)
+        for w in all_widgets:
+            w.bind("<Button-1>", lambda e: handler())
+
+    def _hover_bind(self, card, widgets, on, off) -> None:
+        """整卡悬停：子控件间移动不闪烁（离开后延时确认指针真的移出卡片）。"""
+        state = {"in": False}
+
+        def enter(_=None) -> None:
+            if not state["in"]:
+                state["in"] = True
+                on()
+
+        def leave(_=None) -> None:
+            def check() -> None:
+                x, y = card.winfo_pointerxy()
+                cx, cy = card.winfo_rootx(), card.winfo_rooty()
+                if not (cx <= x < cx + card.winfo_width()
+                        and cy <= y < cy + card.winfo_height()):
+                    state["in"] = False
+                    off()
+            card.after(25, check)
+
+        for w in widgets:
+            w.bind("<Enter>", enter)
+            w.bind("<Leave>", leave)
 
     def _build_credit(self, parent) -> None:
         """页脚署名 + 可点击的联系链接。"""
@@ -170,17 +335,17 @@ class LauncherApp:
         label = about.get("contact_label", "联系我")
         url = about.get("contact_url", "")
 
-        footer = tk.Frame(parent, bg="#0d1b2a")
-        footer.pack(side="bottom", pady=(0, 4))
+        footer = tk.Frame(parent, bg=self.lc["bg"])
+        footer.pack(side="bottom", pady=(8, 2))
         tk.Label(footer, text=f"© {org}  ·  {author} {credit}  ·  ",
-                 font=("Microsoft YaHei", 10), fg="#778da9", bg="#0d1b2a").pack(side="left")
+                 font=("Microsoft YaHei", 10), fg=self.lc["muted"], bg=self.lc["bg"]).pack(side="left")
         link = tk.Label(footer, text=label, font=("Microsoft YaHei", 10, "underline"),
-                        fg="#22d3ee", bg="#0d1b2a", cursor="hand2")
+                        fg=self.lc["link"], bg=self.lc["bg"], cursor="hand2")
         link.pack(side="left")
         if url:
             link.bind("<Button-1>", lambda e: webbrowser.open(url))
-            link.bind("<Enter>", lambda e: link.configure(fg="#67e8f9"))
-            link.bind("<Leave>", lambda e: link.configure(fg="#22d3ee"))
+            link.bind("<Enter>", lambda e: link.configure(fg=self.lc["link_hi"]))
+            link.bind("<Leave>", lambda e: link.configure(fg=self.lc["link"]))
 
     # ---- 模块入口（惰性导入，缺失则提示开发中）----
     def _safe_launch(self, importer, label: str) -> None:

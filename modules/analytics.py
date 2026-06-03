@@ -282,9 +282,18 @@ class AnalyticsCenter:
         tk.Checkbutton(bar, text="只看已完成", variable=self._completed_only, bg="#e6edfb",
                        font=("Microsoft YaHei", 12), command=self.refresh).pack(side="left", padx=10)
 
+        def _darken(hexc: str, f: float = 0.85) -> str:
+            r, g, bl = (int(hexc[i:i + 2], 16) for i in (1, 3, 5))
+            return "#%02x%02x%02x" % (int(r * f), int(g * f), int(bl * f))
+
         def tb(txt, cmd, color="#2563eb"):
-            return tk.Button(bar, text=txt, command=cmd, font=("Microsoft YaHei", 12, "bold"),
-                             bg=color, fg="white", relief="flat", padx=12, pady=5, cursor="hand2")
+            # 用 Label 实现按钮：macOS 上原生 tk.Button 会忽略背景色导致白字看不清。
+            btn = tk.Label(bar, text=txt, font=("Microsoft YaHei", 12, "bold"),
+                           bg=color, fg="white", padx=14, pady=7, cursor="hand2")
+            btn.bind("<Button-1>", lambda e: cmd())
+            btn.bind("<Enter>", lambda e: btn.configure(bg=_darken(color)))
+            btn.bind("<Leave>", lambda e: btn.configure(bg=color))
+            return btn
 
         tb("🔄 刷新", self.refresh, "#475569").pack(side="left", padx=6)
         tb("📈 单题统计", self.show_stats).pack(side="left", padx=4)

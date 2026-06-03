@@ -497,9 +497,19 @@ class ReportPanel:
         self.count_lbl = tk.Label(bar, text="", font=("Microsoft YaHei", 12), bg="#e6edfb")
         self.count_lbl.pack(side="left", padx=14, pady=8)
 
+        def _darken(hexc: str, f: float = 0.85) -> str:
+            r, g, bl = (int(hexc[i:i + 2], 16) for i in (1, 3, 5))
+            return "#%02x%02x%02x" % (int(r * f), int(g * f), int(bl * f))
+
         def b(parent, txt, cmd, color="#2563eb"):
-            return tk.Button(parent, text=txt, command=cmd, font=("Microsoft YaHei", 12, "bold"),
-                             bg=color, fg="white", relief="flat", padx=12, pady=6, cursor="hand2")
+            # 用 Label 实现按钮：macOS 上原生 tk.Button 会忽略背景色，导致白字落在
+            # 系统浅色按钮面上看不清。Label 完全遵守 bg/fg，彩色底 + 白字清晰可读。
+            btn = tk.Label(parent, text=txt, font=("Microsoft YaHei", 12, "bold"),
+                           bg=color, fg="white", padx=16, pady=9, cursor="hand2")
+            btn.bind("<Button-1>", lambda e: cmd())
+            btn.bind("<Enter>", lambda e: btn.configure(bg=_darken(color)))
+            btn.bind("<Leave>", lambda e: btn.configure(bg=color))
+            return btn
 
         b(bar, "🎲 生成200份示例数据", self.on_sample, "#475569").pack(side="right", padx=6, pady=6)
 

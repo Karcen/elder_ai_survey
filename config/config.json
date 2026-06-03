@@ -6,6 +6,9 @@
     "language": "zh-CN",
     "debug": false
   },
+  "ui": {
+    "theme": "light"
+  },
   "paths": {
     "questionnaire": "survey/questionnaire.json",
     "answers_csv": "survey/answers.csv",
@@ -16,10 +19,20 @@
     "logs": "logs"
   },
   "accessibility": {
-    "font_sizes": [24, 36, 48, 60, 72],
+    "font_sizes": [
+      24,
+      36,
+      48,
+      60,
+      72
+    ],
     "default_font_size": 48,
     "default_font_bold": true,
-    "contrast_themes": ["white_black", "black_white", "blue_yellow"],
+    "contrast_themes": [
+      "white_black",
+      "black_white",
+      "blue_yellow"
+    ],
     "default_theme": "white_black",
     "button_min_height": 80,
     "button_min_width": 300,
@@ -76,11 +89,21 @@
     "theme": "tech_blue",
     "refresh_interval_seconds": 5,
     "carousel_interval_seconds": 10,
-    "carousel_pages": ["overview", "charts", "trends", "ai", "report"],
+    "carousel_pages": [
+      "overview",
+      "charts",
+      "trends",
+      "ai",
+      "report"
+    ],
     "fullscreen": true
   },
   "export": {
-    "formats": ["excel", "pdf", "word"],
+    "formats": [
+      "excel",
+      "pdf",
+      "word"
+    ],
     "company_name": "Shenshen Yang & Yizhi Wang课题组",
     "report_title": "适老化智能问卷调查分析报告"
   },

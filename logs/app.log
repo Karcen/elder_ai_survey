@@ -497,3 +497,49 @@
 2026-06-03 12:10:23 | WARNING | speech_engine | pyttsx3 不可用，语音播报降级为静默：No module named 'pyttsx3'
 2026-06-03 12:10:23 | INFO    | speech_engine | vosk/SpeechRecognition 不可用，语音识别关闭：No module named 'vosk'
 2026-06-03 12:10:23 | INFO    | speech_engine | 语音引擎初始化：TTS=降级(静默) ASR=不可用
+2026-06-03 16:12:39 | INFO    | self-check | ===== 开始自检 =====
+2026-06-03 16:12:39 | INFO    | self-check | Python 版本：3.13.9 ✓
+2026-06-03 16:12:39 | INFO    | self-check | 配置加载：ElderAI Survey Platform ✓
+2026-06-03 16:12:39 | INFO    | self-check | 目录就绪：exports ✓
+2026-06-03 16:12:39 | INFO    | self-check | 目录就绪：backup ✓
+2026-06-03 16:12:39 | INFO    | self-check | 目录就绪：logs ✓
+2026-06-03 16:12:39 | INFO    | self-check | 问卷加载：《老年人智能技术使用情况调查问卷》共 20 题 ✓
+2026-06-03 16:12:39 | INFO    | self-check | tkinter 可用 ✓
+2026-06-03 16:12:40 | INFO    | numexpr.utils | NumExpr defaulting to 10 threads.
+2026-06-03 16:12:40 | INFO    | self-check | 可选依赖 pandas     可用 ✓（数据分析）
+2026-06-03 16:12:40 | INFO    | self-check | 可选依赖 numpy      可用 ✓（数值计算）
+2026-06-03 16:12:40 | INFO    | self-check | 可选依赖 matplotlib 可用 ✓（图表）
+2026-06-03 16:12:40 | INFO    | self-check | 可选依赖 openpyxl   可用 ✓（Excel导出）
+2026-06-03 16:12:40 | INFO    | self-check | 可选依赖 reportlab  可用 ✓（PDF导出）
+2026-06-03 16:12:40 | INFO    | self-check | 可选依赖 docx       可用 ✓（Word导出）
+2026-06-03 16:12:40 | WARNING | self-check | 可选依赖 pyttsx3    缺失（离线语音 将降级或不可用）
+2026-06-03 16:12:40 | INFO    | self-check | 可选依赖 requests   可用 ✓（联网AI）
+2026-06-03 16:12:40 | INFO    | self-check | ===== 自检结束：全部通过 =====
+2026-06-03 16:18:11 | INFO    | self-check | ===== 开始自检 =====
+2026-06-03 16:18:11 | INFO    | self-check | Python 版本：3.13.9 ✓
+2026-06-03 16:18:11 | INFO    | self-check | 配置加载：ElderAI Survey Platform ✓
+2026-06-03 16:18:11 | INFO    | self-check | 目录就绪：exports ✓
+2026-06-03 16:18:11 | INFO    | self-check | 目录就绪：backup ✓
+2026-06-03 16:18:11 | INFO    | self-check | 目录就绪：logs ✓
+2026-06-03 16:18:11 | INFO    | self-check | 问卷加载：《老年人智能技术使用情况调查问卷》共 20 题 ✓
+2026-06-03 16:18:11 | INFO    | self-check | tkinter 可用 ✓
+2026-06-03 16:18:12 | INFO    | numexpr.utils | NumExpr defaulting to 10 threads.
+2026-06-03 16:18:12 | INFO    | self-check | 可选依赖 pandas     可用 ✓（数据分析）
+2026-06-03 16:18:12 | INFO    | self-check | 可选依赖 numpy      可用 ✓（数值计算）
+2026-06-03 16:18:12 | INFO    | self-check | 可选依赖 matplotlib 可用 ✓（图表）
+2026-06-03 16:18:12 | INFO    | self-check | 可选依赖 openpyxl   可用 ✓（Excel导出）
+2026-06-03 16:18:12 | INFO    | self-check | 可选依赖 reportlab  可用 ✓（PDF导出）
+2026-06-03 16:18:12 | INFO    | self-check | 可选依赖 docx       可用 ✓（Word导出）
+2026-06-03 16:18:12 | WARNING | self-check | 可选依赖 pyttsx3    缺失（离线语音 将降级或不可用）
+2026-06-03 16:18:12 | INFO    | self-check | 可选依赖 requests   可用 ✓（联网AI）
+2026-06-03 16:18:12 | INFO    | self-check | ===== 自检结束：全部通过 =====
+2026-06-03 16:19:33 | INFO    | launcher | 已在浏览器打开问卷设计器：/Users/karcenzheng/Downloads/elder_ai_survey/builder/survey_builder.html
+2026-06-03 16:19:52 | INFO    | questionnaire_engine | 已加载问卷：老年人智能技术使用情况调查问卷（20 题）
+2026-06-03 16:19:52 | WARNING | speech_engine | pyttsx3 不可用，语音播报降级为静默：No module named 'pyttsx3'
+2026-06-03 16:19:52 | INFO    | speech_engine | vosk/SpeechRecognition 不可用，语音识别关闭：No module named 'vosk'
+2026-06-03 16:19:52 | INFO    | speech_engine | 语音引擎初始化：TTS=降级(静默) ASR=不可用
+2026-06-03 16:19:58 | INFO    | questionnaire_engine | 已加载问卷：老年人智能技术使用情况调查问卷（20 题）
+2026-06-03 16:20:04 | INFO    | questionnaire_engine | 已加载问卷：老年人智能技术使用情况调查问卷（20 题）
+2026-06-03 16:20:12 | INFO    | questionnaire_engine | 已加载问卷：老年人智能技术使用情况调查问卷（20 题）
+2026-06-03 16:20:14 | INFO    | ai_engine | 未配置可用的 AI provider，使用离线分析。
+2026-06-03 16:22:36 | INFO    | questionnaire_engine | 已加载问卷：老年人智能技术使用情况调查问卷（20 题）
