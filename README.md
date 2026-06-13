@@ -77,7 +77,7 @@ python main.py          # 主控台 →「回访管理」→ 按 ①~⑥ 操作
 > 📌 以下为历史版本记录；其中提到的中文文件名已在 **v1.2.0** 统一重构/移除，请以上方 v1.2.0 为准。
 > Historical entries below; the Chinese filenames they mention were consolidated/removed in **v1.2.0**.
 
-### v1.1.1 (2026-06-13)
+### v1.1.1 (2026-06-10)
 
 #### 新增功能 | New Features
 1. **回访人员自动分配系统**
@@ -112,7 +112,7 @@ python main.py          # 主控台 →「回访管理」→ 按 ①~⑥ 操作
 
 ---
 
-### v1.1.0 (2026-06-13)
+### v1.1.0 (2026-06-7)
 
 #### 新增功能 | New Features
 1. **回访管理模块 · Follow-up Management**
