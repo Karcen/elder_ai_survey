@@ -222,6 +222,7 @@ class LauncherApp:
             ("📊", "数据分析中心", "查看 · 筛选 · 统计 · 交叉分析 · 导出", "#f59e0b", self.open_analytics),
             ("📺", "科交会大屏", "全屏数据驾驶舱，自动轮播与实时刷新", "#06b6d4", self.open_dashboard),
             ("🤖", "AI 分析报告", "生成调查结论、洞察并导出 Excel/PDF/Word", "#a78bfa", self.open_ai_report),
+            ("📞", "回访管理", "分配受试者 · 学生查询 · 完成情况统计", "#8b5cf6", self.open_followup),
         ]
         container = tk.Frame(self.root, bg=lc["bg"])
         container.pack(fill="both", expand=True, padx=46)
@@ -386,6 +387,13 @@ class LauncherApp:
             from modules import report_generator
             report_generator.launch(self.config, master=self.root)
         self._safe_launch(_run, "AI分析报告")
+
+    def open_followup(self) -> None:
+        def _run() -> None:
+            # 随访管理面板：上传名单 → 分配 → 生成查询页 → 完成统计
+            from followup import followup_panel
+            followup_panel.launch(self.config, master=self.root)
+        self._safe_launch(_run, "回访管理")
 
     def run(self) -> None:
         self.root.mainloop()

@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>随访分配系统</title>
+<link rel="stylesheet" href="assets/theme.css">
+<style>
+  /* 学生分配数概览：横向小卡 */
+  .stu-counts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .stu-chip {
+    border: 1px solid var(--border); border-radius: var(--radius-sm);
+    padding: 7px 12px; font-size: 13px; background: var(--surface);
+    display: flex; align-items: baseline; gap: 7px;
+  }
+  .stu-chip b { font-size: 15px; }
+  .stu-chip.low { border-color: var(--warn); background: var(--warn-soft); color: var(--warn); }
+  .tablewrap { max-height: 60vh; overflow: auto; border: 1px solid var(--border); border-radius: var(--radius-sm); }
+  thead th { position: sticky; top: 0; background: var(--surface-2); z-index: 1; }
+  select.assign { width: auto; min-width: 110px; padding: 6px 10px; }
+  .toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 14px; }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand">
+    <div class="logo">📞</div>
+    <div>
+      <h1>随访分配系统</h1>
+      <div class="sub">把完成问卷的受试者分配给学生 · 打电话 / 发短信</div>
+    </div>
+  </div>
+  <div class="row">
+    <button class="icon-btn" id="themeBtn" title="切换主题">🌙</button>
+  </div>
+</div>
+
+<div class="wrap">
+  <!-- 第一步：导入名单 -->
+  <div class="card">
+    <h2>① 导入名单</h2>
+    <div class="grid-2">
+      <div>
+        <label>学生名单（CSV 或 JSON）</label>
+        <div class="drop" id="dropStudents">
+          <span class="name" id="studentsName">点击选择 / 拖入学生文件</span>
+          <div class="hint" style="margin-top:4px">列：student_name, phone（容错中英文表头）</div>
+        </div>
+        <input type="file" id="fileStudents" accept=".csv,.json" hidden>
+      </div>
+      <div>
+        <label>受试者名单（CSV 或 JSON）</label>
+        <div class="drop" id="dropSubjects">
+          <span class="name" id="subjectsName">点击选择 / 拖入受试者文件</span>
+          <div class="hint" style="margin-top:4px">列：subject_name, phone, note（可选）</div>
+        </div>
+        <input type="file" id="fileSubjects" accept=".csv,.json" hidden>
+      </div>
+    </div>
+    <div class="row" style="margin-top:12px">
+      <button class="btn ghost sm" id="loadDemo">载入示例数据</button>
+      <span class="hint">未配置服务器，所有处理都在本机浏览器完成，数据不会上传。</span>
+    </div>
+  </div>
+
+  <!-- 第二步：分配总览 + 微调 -->
+  <div class="card" id="allocCard" style="display:none">
+    <h2>② 分配总览与微调</h2>
+
+    <!-- 顶部横幅：未分配 / 已分配 / 总数 -->
+    <div class="statbar">
+      <span class="pill warn" id="pillUnassigned" style="display:none">未分配 <b id="unassignedN">0</b> 人</span>
+      <span class="pill accent">已分配 <b id="assignedN">0</b> / <span id="totalN">0</span></span>
+      <span class="pill">学生 <b id="studentN">0</b> 人</span>
+      <span class="spacer"></span>
+      <button class="btn sm" id="btnAverage">⚖️ 平均分配</button>
+      <button class="btn sm" id="btnClear">清空分配</button>
+    </div>
+
+    <!-- 每位学生当前分配数 -->
+    <div class="stu-counts" id="stuCounts"></div>
+
+    <!-- 工具条 -->
+    <div class="toolbar" style="margin-top:16px">
+      <input type="search" id="search" placeholder="搜索受试者姓名 / 电话…" style="max-width:260px">
+      <select id="filterStu" style="max-width:180px"><option value="">全部学生</option></select>
+      <span class="spacer"></span>
+      <button class="btn primary sm" id="btnExportJson">⬇️ 导出 allocation.json</button>
+      <button class="btn sm" id="btnExportCsv">导出 CSV</button>
+    </div>
+
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr>
+            <th>受试者</th><th>电话</th><th>备注</th><th style="width:150px">分配给</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="foot">随访子系统 · 分配 · ElderAI Survey Platform</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ==================== 主题 ==================== */
+const THEME_KEY = 'followup-theme';
+function applyTheme(t){
+  document.documentElement.setAttribute('data-theme', t);
+  document.getElementById('themeBtn').textContent = t === 'dark' ? '☀️' : '🌙';
+  localStorage.setItem(THEME_KEY, t);
+}
+applyTheme(localStorage.getItem(THEME_KEY) || 'light');
+document.getElementById('themeBtn').onclick = () =>
+  applyTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+
+/* ==================== 提示 ==================== */
+let toastT;
+function toast(msg){
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('show');
+  clearTimeout(toastT); toastT = setTimeout(()=>el.classList.remove('show'), 2200);
+}
+
+/* ==================== 轻量 CSV 解析 ==================== */
+function parseCSV(text){
+  text = text.replace(/^﻿/, '');
+  const rows = []; let row = [], cur = '', q = false;
+  for (let i=0;i<text.length;i++){
+    const c = text[i];
+    if (q){
+      if (c === '"'){ if (text[i+1] === '"'){ cur+='"'; i++; } else q=false; }
+      else cur += c;
+    } else {
+      if (c === '"') q = true;
+      else if (c === ',') { row.push(cur); cur=''; }
+      else if (c === '\n'){ row.push(cur); rows.push(row); row=[]; cur=''; }
+      else if (c === '\r'){ /* skip */ }
+      else cur += c;
+    }
+  }
+  if (cur !== '' || row.length){ row.push(cur); rows.push(row); }
+  return rows.filter(r => r.some(c => c.trim() !== ''));
+}
+const ALIAS = {
+  student_id:'student_id','学生id':'student_id','工号':'student_id','编号':'id',
+  student_name:'student_name','学生':'student_name','学生姓名':'student_name',
+  subject_id:'subject_id','受试者id':'subject_id',
+  subject_name:'subject_name','受试者':'subject_name','受试者姓名':'subject_name','老人姓名':'subject_name',
+  id:'id', name:'name','姓名':'name','名字':'name',
+  phone:'phone', tel:'phone', mobile:'phone','电话':'phone','手机':'phone','手机号':'phone','联系电话':'phone',
+  email:'email','邮箱':'email', note:'note','备注':'note', remark:'note'
+};
+function norm(k){ k=(k||'').trim().replace(/^﻿/,'').toLowerCase(); return ALIAS[k]||k; }
+
+function recordsFromFile(text, name, kind){
+  // JSON 直接读，CSV 解析
+  let rows;
+  if (name.toLowerCase().endsWith('.json')){
+    rows = JSON.parse(text);
+    rows = rows.map(o => { const r={}; for (const k in o) r[norm(k)] = (''+o[k]).trim(); return r; });
+  } else {
+    const grid = parseCSV(text);
+    if (!grid.length) return [];
+    const head = grid[0].map(norm);
+    rows = grid.slice(1).map(cells => {
+      const r = {}; head.forEach((h,i)=> r[h] = (cells[i]||'').trim()); return r;
+    });
+  }
+  const nameKey = kind === 'students' ? 'student_name' : 'subject_name';
+  const idKey = kind === 'students' ? 'student_id' : 'subject_id';
+  const pref = kind === 'students' ? 'stu' : 'sub';
+  return rows.map((r,i)=>({
+    id: r[idKey] || r.id || `${pref}_${String(i+1).padStart(3,'0')}`,
+    name: r[nameKey] || r.name || '',
+    phone: r.phone || '',
+    note: r.note || ''
+  })).filter(r => r.name);
+}
+
+/* ==================== 状态 ==================== */
+let students = [];           // {id,name,phone}
+let subjects = [];           // {id,name,phone,note, assignedTo:studentId|null}
+
+/* ==================== 文件载入 ==================== */
+function bindDrop(dropId, inputId, kind, onLoad){
+  const drop = document.getElementById(dropId), input = document.getElementById(inputId);
+  drop.onclick = () => input.click();
+  input.onchange = () => input.files[0] && readFile(input.files[0]);
+  ['dragover','dragenter'].forEach(e=>drop.addEventListener(e, ev=>{ev.preventDefault();drop.classList.add('over');}));
+  ['dragleave','drop'].forEach(e=>drop.addEventListener(e, ev=>{ev.preventDefault();drop.classList.remove('over');}));
+  drop.addEventListener('drop', ev => ev.dataTransfer.files[0] && readFile(ev.dataTransfer.files[0]));
+  function readFile(file){
+    const r = new FileReader();
+    r.onload = () => {
+      try {
+        const recs = recordsFromFile(r.result, file.name, kind);
+        if (!recs.length){ toast('未解析到有效记录，请检查表头'); return; }
+        drop.querySelector('.name').textContent = `${file.name} · ${recs.length} 条`;
+        onLoad(recs);
+      } catch(e){ toast('解析失败：' + e.message); }
+    };
+    r.readAsText(file, 'utf-8');
+  }
+}
+bindDrop('dropStudents','fileStudents','students', recs => { students = recs; afterLoad(); });
+bindDrop('dropSubjects','fileSubjects','subjects', recs => {
+  subjects = recs.map(s => ({...s, assignedTo: null})); afterLoad();
+});
+
+document.getElementById('loadDemo').onclick = () => {
+  students = [
+    {id:'stu_01',name:'张伟',phone:'13100000001'},
+    {id:'stu_02',name:'王芳',phone:'13100000002'},
+    {id:'stu_03',name:'李娜',phone:'13100000003'},
+    {id:'stu_04',name:'刘洋',phone:'13100000004'},
+    {id:'stu_05',name:'陈静',phone:'13100000005'},
+  ];
+  const names = ['赵桂兰','李建国','孙秀英','周明','吴丽','郑国强','王桂芳','冯敏','陈美娟','褚卫东','卫红','蒋文'];
+  subjects = names.map((n,i)=>({
+    id:`sub_${String(i+1).padStart(3,'0')}`, name:n,
+    phone:`139000000${String(i+1).padStart(2,'0')}`, note:'', assignedTo:null
+  }));
+  document.getElementById('studentsName').textContent = '示例学生 · 5 条';
+  document.getElementById('subjectsName').textContent = '示例受试者 · 12 条';
+  afterLoad(); average(); toast('已载入示例数据并平均分配');
+};
+
+function afterLoad(){
+  if (!students.length || !subjects.length) return;
+  document.getElementById('allocCard').style.display = '';
+  // 学生筛选下拉
+  const fs = document.getElementById('filterStu');
+  fs.innerHTML = '<option value="">全部学生</option>' +
+    students.map(s=>`<option value="${s.id}">${s.name}</option>`).join('') +
+    '<option value="__none__">未分配</option>';
+  render();
+}
+
+/* ==================== 分配逻辑 ==================== */
+function average(){
+  // 轮询均分，保持当前顺序
+  subjects.forEach((s,i)=> s.assignedTo = students[i % students.length].id);
+  render();
+}
+function clearAll(){ subjects.forEach(s=>s.assignedTo=null); render(); }
+document.getElementById('btnAverage').onclick = () => { average(); toast('已平均分配'); };
+document.getElementById('btnClear').onclick = clearAll;
+
+function assignOptions(selectedId){
+  let html = `<option value="">— 不分配 —</option>`;
+  html += students.map(s =>
+    `<option value="${s.id}" ${s.id===selectedId?'selected':''}>${s.name}</option>`).join('');
+  return html;
+}
+
+/* ==================== 渲染 ==================== */
+function counts(){
+  const m = {}; students.forEach(s=>m[s.id]=0);
+  let un = 0;
+  subjects.forEach(s => { if (s.assignedTo && m[s.assignedTo]!=null) m[s.assignedTo]++; else un++; });
+  return {m, un};
+}
+function render(){
+  const {m, un} = counts();
+  const total = subjects.length, assigned = total - un;
+  document.getElementById('totalN').textContent = total;
+  document.getElementById('assignedN').textContent = assigned;
+  document.getElementById('studentN').textContent = students.length;
+  const pu = document.getElementById('pillUnassigned');
+  document.getElementById('unassignedN').textContent = un;
+  pu.style.display = un > 0 ? '' : 'none';
+
+  // 每位学生分配数；低于平均下取整则标记 low（直观看出谁少）
+  const avg = Math.floor(total / students.length);
+  document.getElementById('stuCounts').innerHTML = students.map(s => {
+    const c = m[s.id];
+    const low = c < avg ? ' low' : '';
+    return `<span class="stu-chip${low}">${s.name} <b>${c}</b></span>`;
+  }).join('');
+
+  // 表格（应用搜索 + 学生筛选）
+  const kw = document.getElementById('search').value.trim().toLowerCase();
+  const fStu = document.getElementById('filterStu').value;
+  let list = subjects;
+  if (kw) list = list.filter(s => s.name.toLowerCase().includes(kw) || (s.phone||'').includes(kw));
+  if (fStu === '__none__') list = list.filter(s => !s.assignedTo);
+  else if (fStu) list = list.filter(s => s.assignedTo === fStu);
+
+  const tb = document.getElementById('tbody');
+  if (!list.length){ tb.innerHTML = `<tr><td colspan="4"><div class="empty"><span class="big">📭</span>无匹配的受试者</div></td></tr>`; return; }
+  tb.innerHTML = list.map(s => `
+    <tr data-id="${s.id}">
+      <td><b>${esc(s.name)}</b></td>
+      <td class="mono">${esc(s.phone)}</td>
+      <td class="muted">${esc(s.note||'')}</td>
+      <td><select class="assign" data-id="${s.id}">${assignOptions(s.assignedTo)}</select></td>
+    </tr>`).join('');
+  tb.querySelectorAll('select.assign').forEach(sel => {
+    sel.onchange = () => {
+      const s = subjects.find(x => x.id === sel.dataset.id);
+      s.assignedTo = sel.value || null;
+      render();
+    };
+  });
+}
+function esc(s){ return (s??'').toString().replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+document.getElementById('search').oninput = render;
+document.getElementById('filterStu').onchange = render;
+
+/* ==================== 导出 ==================== */
+function buildAllocation(){
+  const sById = {}; students.forEach(s => sById[s.id]=s);
+  const assignments = [], unassigned = [];
+  subjects.forEach(s => {
+    if (s.assignedTo && sById[s.assignedTo]){
+      assignments.push({
+        subject_id:s.id, subject_name:s.name, phone:s.phone, note:s.note||'',
+        student_id:s.assignedTo, student_name:sById[s.assignedTo].name
+      });
+    } else {
+      unassigned.push({subject_id:s.id, subject_name:s.name, phone:s.phone});
+    }
+  });
+  return {
+    generated_at: new Date().toISOString(),
+    students: students.map(s=>({student_id:s.id, student_name:s.name, phone:s.phone})),
+    assignments, unassigned
+  };
+}
+function download(name, content, type){
+  const blob = new Blob([content], {type});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = name; a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href), 1000);
+}
+document.getElementById('btnExportJson').onclick = () => {
+  const data = buildAllocation();
+  download('allocation.json', JSON.stringify(data, null, 2), 'application/json');
+  toast(data.unassigned.length ? `已导出（仍有 ${data.unassigned.length} 人未分配）` : '已导出 allocation.json');
+};
+document.getElementById('btnExportCsv').onclick = () => {
+  const d = buildAllocation();
+  const rows = [['subject_id','subject_name','phone','note','student_id','student_name'],
+    ...d.assignments.map(a=>[a.subject_id,a.subject_name,a.phone,a.note,a.student_id,a.student_name]),
+    ...d.unassigned.map(u=>[u.subject_id,u.subject_name,u.phone,'','',''])];
+  const csv = rows.map(r=>r.map(c=>`"${(c||'').toString().replace(/"/g,'""')}"`).join(',')).join('\n');
+  download('allocation.csv', '﻿'+csv, 'text/csv;charset=utf-8');
+  toast('已导出 CSV');
+};
+</script>
+</body>
+</html>

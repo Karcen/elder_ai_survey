@@ -543,3 +543,248 @@
 2026-06-03 16:20:12 | INFO    | questionnaire_engine | 已加载问卷：老年人智能技术使用情况调查问卷（20 题）
 2026-06-03 16:20:14 | INFO    | ai_engine | 未配置可用的 AI provider，使用离线分析。
 2026-06-03 16:22:36 | INFO    | questionnaire_engine | 已加载问卷：老年人智能技术使用情况调查问卷（20 题）
+2026-06-03 16:35:04 | INFO    | launcher | 已在浏览器打开问卷设计器：/Users/karcenzheng/Downloads/elder_ai_survey/builder/survey_builder.html
+2026-06-03 16:35:04 | INFO    | questionnaire_engine | 已加载问卷：老年人智能技术使用情况调查问卷（20 题）
+2026-06-03 16:35:04 | WARNING | speech_engine | pyttsx3 不可用，语音播报降级为静默：No module named 'pyttsx3'
+2026-06-03 16:35:04 | INFO    | speech_engine | vosk/SpeechRecognition 不可用，语音识别关闭：No module named 'vosk'
+2026-06-03 16:35:04 | INFO    | speech_engine | 语音引擎初始化：TTS=降级(静默) ASR=不可用
+2026-06-13 08:45:40 | INFO    | questionnaire_engine | 已加载问卷：老年人智能技术使用情况调查问卷（20 题）
+2026-06-13 09:37:54 | INFO    | self-check | ===== 开始自检 =====
+2026-06-13 09:37:54 | INFO    | self-check | Python 版本：3.13.9 ✓
+2026-06-13 09:37:54 | INFO    | self-check | 配置加载：ElderAI Survey Platform ✓
+2026-06-13 09:37:54 | INFO    | self-check | 目录就绪：exports ✓
+2026-06-13 09:37:54 | INFO    | self-check | 目录就绪：backup ✓
+2026-06-13 09:37:54 | INFO    | self-check | 目录就绪：logs ✓
+2026-06-13 09:37:54 | INFO    | self-check | 问卷加载：《老年人智能技术使用情况调查问卷》共 20 题 ✓
+2026-06-13 09:37:54 | INFO    | self-check | tkinter 可用 ✓
+2026-06-13 09:37:55 | INFO    | numexpr.utils | NumExpr defaulting to 10 threads.
+2026-06-13 09:37:55 | INFO    | self-check | 可选依赖 pandas     可用 ✓（数据分析）
+2026-06-13 09:37:55 | INFO    | self-check | 可选依赖 numpy      可用 ✓（数值计算）
+2026-06-13 09:37:55 | INFO    | self-check | 可选依赖 matplotlib 可用 ✓（图表）
+2026-06-13 09:37:55 | INFO    | self-check | 可选依赖 openpyxl   可用 ✓（Excel导出）
+2026-06-13 09:37:55 | INFO    | self-check | 可选依赖 reportlab  可用 ✓（PDF导出）
+2026-06-13 09:37:55 | INFO    | self-check | 可选依赖 docx       可用 ✓（Word导出）
+2026-06-13 09:37:55 | WARNING | self-check | 可选依赖 pyttsx3    缺失（离线语音 将降级或不可用）
+2026-06-13 09:37:55 | INFO    | self-check | 可选依赖 requests   可用 ✓（联网AI）
+2026-06-13 09:37:55 | INFO    | self-check | ===== 自检结束：全部通过 =====
+2026-06-13 09:47:43 | INFO    | self-check | ===== 开始自检 =====
+2026-06-13 09:47:43 | INFO    | self-check | Python 版本：3.14.2 ✓
+2026-06-13 09:47:43 | INFO    | self-check | 配置加载：ElderAI Survey Platform ✓
+2026-06-13 09:47:43 | INFO    | self-check | 目录就绪：exports ✓
+2026-06-13 09:47:43 | INFO    | self-check | 目录就绪：backup ✓
+2026-06-13 09:47:43 | INFO    | self-check | 目录就绪：logs ✓
+2026-06-13 09:47:43 | INFO    | self-check | 问卷加载：《老年人智能技术使用情况调查问卷》共 20 题 ✓
+2026-06-13 09:47:43 | WARNING | self-check | tkinter 不可用（图形界面将无法启动）：No module named '_tkinter'
+2026-06-13 09:47:43 | INFO    | self-check | 可选依赖 pandas     可用 ✓（数据分析）
+2026-06-13 09:47:43 | INFO    | self-check | 可选依赖 numpy      可用 ✓（数值计算）
+2026-06-13 09:47:43 | WARNING | self-check | 可选依赖 matplotlib 缺失（图表 将降级或不可用）
+2026-06-13 09:47:43 | INFO    | self-check | 可选依赖 openpyxl   可用 ✓（Excel导出）
+2026-06-13 09:47:43 | WARNING | self-check | 可选依赖 reportlab  缺失（PDF导出 将降级或不可用）
+2026-06-13 09:47:43 | WARNING | self-check | 可选依赖 docx       缺失（Word导出 将降级或不可用）
+2026-06-13 09:47:43 | WARNING | self-check | 可选依赖 pyttsx3    缺失（离线语音 将降级或不可用）
+2026-06-13 09:47:44 | INFO    | self-check | 可选依赖 requests   可用 ✓（联网AI）
+2026-06-13 09:47:44 | INFO    | self-check | ===== 自检结束：全部通过 =====
+2026-06-13 09:51:28 | INFO    | questionnaire_engine | 已加载问卷：老年人智能技术使用情况调查问卷（20 题）
+2026-06-13 09:51:28 | INFO    | data_manager | 已备份到 /Users/karcenzheng/Downloads/elder_ai_survey/backup/backup_20260613_095128
+2026-06-13 09:51:28 | WARNING | data_manager | 已清空全部答卷（已备份）。
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512867635900001（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512867691500003（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512867742400005（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512867789800007（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512867835500009（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512867880100011（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512867929800013（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512867979500015（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512868025500017（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512868073700019（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512868121100021（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512868176000023（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512868227800025（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512868280700027（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512868335600029（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512868389200031（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512868442700033（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512868497100035（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512868552300037（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512868608000039（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512868667900041（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512868725700043（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512868783800045（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512868844000047（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512868902500049（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512868963400051（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512869023900053（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512869085500055（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512869146700057（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512869210400059（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512869273800061（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512869336700063（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512869400200065（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512869466400067（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512869533500069（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512869600600071（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512869669800073（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512869738300075（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512869806300077（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512869873700079（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512869943900081（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512870019600083（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512870091000085（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512870162300087（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512870235700089（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512870309500091（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512870387200093（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512870460900095（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512870538900097（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512870616100099（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512870693400101（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512870770800103（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512870846400105（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512870923800107（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512871003100109（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512871081000111（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512871160800113（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512871240200115（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512871326900117（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512871409900119（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512871491600121（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512871604200123（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512871736400125（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512871856100127（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512871971000129（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512872069500131（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512872161900133（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512872250800135（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512872343900137（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512872434100139（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512872521800141（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512872614600143（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512872704300145（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512872794800147（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512872885600149（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512872978300151（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512873072200153（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512873172400155（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512873267000157（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512873363400159（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512873460100161（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512873553800163（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512873650800165（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512873747400167（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512873845900169（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512873945100171（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512874042300173（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512874146600175（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512874255700177（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512874359000179（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512874463100181（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512874565000183（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512874669300185（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512874779800187（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512874891600189（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512874998000191（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512875104200193（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512875213400195（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512875318800197（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512875425700199（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512875537200201（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512875646700203（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512875757900205（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512875865900207（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512875977700209（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512876088500211（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512876199800213（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512876316700215（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512876444800217（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512876571000219（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512876691000221（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512876808300223（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512876937900225（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512877068800227（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512877207300229（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512877338600231（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512877466500233（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512877590200235（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512877708600237（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512877826900239（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512877944500241（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512878061300243（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512878179000245（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512878297200247（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512878420400249（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512878539000251（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512878658800253（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512878779300255（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512878902800257（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512879025000259（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512879164600261（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512879310800263（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512879696400265（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512879873400267（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512880050400269（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512880222900271（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512880378100273（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512880531800275（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512880682500277（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512880831800279（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512880977700281（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512881117400283（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512881267600285（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512881417100287（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512881571800289（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512881733200291（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512881894600293（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512882057400295（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512882220400297（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512882375600299（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512882527500301（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512882682700303（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512882846300305（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512883002200307（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512883158100309（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512883310100311（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512883462600313（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512883627900315（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512883777800317（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512883928100319（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512884085200321（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512884252700323（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512884431700325（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512884602200327（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512884771500329（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512884931000331（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512885088200333（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512885250400335（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512885415600337（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512885579600339（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512885748300341（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512885915800343（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512886079500345（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512886247900347（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512886421500349（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512886588900351（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512886756200353（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512886919800355（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512887075600357（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512887231500359（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512887388900361（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512887551200363（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512887711400365（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512887873900367（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512888032200369（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512888191300371（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512888356100373（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512888527100375（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512888692800377（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512888858300379（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512889027300381（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512889190900383（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512889359100385（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512889526900387（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512889695200389（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512889872000391（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512890041800393（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512890218500395（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512890389100397（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已保存答卷 R2026061309512890565600399（db=True csv=True）
+2026-06-13 09:51:28 | INFO    | data_manager | 已生成模拟答卷 200/200 份

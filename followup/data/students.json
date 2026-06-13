@@ -1,0 +1,27 @@
+[
+  {
+    "student_id": "stu_01",
+    "student_name": "张伟",
+    "phone": "13100000001"
+  },
+  {
+    "student_id": "stu_02",
+    "student_name": "王芳",
+    "phone": "13100000002"
+  },
+  {
+    "student_id": "stu_03",
+    "student_name": "李娜",
+    "phone": "13100000003"
+  },
+  {
+    "student_id": "stu_04",
+    "student_name": "刘洋",
+    "phone": "13100000004"
+  },
+  {
+    "student_id": "stu_05",
+    "student_name": "陈静",
+    "phone": "13100000005"
+  }
+]

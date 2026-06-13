@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>学生随访查询</title>
+<style>
+/* ======================================================================
+   随访子系统 · 共享主题（简约 / 亮·暗双主题）
+   默认浅色；<html data-theme="dark"> 切换暗色。三页通用。
+   ====================================================================== */
+:root {
+  --bg: #f5f7fa;
+  --surface: #ffffff;
+  --surface-2: #f0f3f8;
+  --border: #e2e8f0;
+  --border-strong: #cbd5e1;
+  --text: #1f2937;
+  --muted: #64748b;
+  --faint: #94a3b8;
+  --accent: #2563eb;
+  --accent-soft: #eff4ff;
+  --accent-press: #1d4ed8;
+  --warn: #d97706;
+  --warn-soft: #fff5e6;
+  --ok: #16a34a;
+  --ok-soft: #ecfdf3;
+  --danger: #dc2626;
+  --shadow: 0 1px 2px rgba(15, 23, 42, .04);
+  --radius: 12px;
+  --radius-sm: 8px;
+}
+[data-theme="dark"] {
+  --bg: #0d1320;
+  --surface: #151c2c;
+  --surface-2: #1b2436;
+  --border: #26324a;
+  --border-strong: #34425f;
+  --text: #e6ebf3;
+  --muted: #9aa7bd;
+  --faint: #6b7a96;
+  --accent: #4f8cff;
+  --accent-soft: #16233f;
+  --accent-press: #74a4ff;
+  --warn: #f59e0b;
+  --warn-soft: #2a2310;
+  --ok: #34d399;
+  --ok-soft: #102a20;
+  --danger: #f87171;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .3);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+               "Microsoft YaHei", "Hiragino Sans GB", sans-serif;
+  font-size: 15px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  transition: background .2s ease, color .2s ease;
+}
+
+/* ---- 顶栏 ---- */
+.topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; padding: 16px 24px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+.topbar .brand { display: flex; align-items: center; gap: 10px; }
+.topbar .brand .logo {
+  width: 34px; height: 34px; border-radius: 9px;
+  background: var(--accent-soft); color: var(--accent);
+  display: grid; place-items: center; font-size: 18px;
+}
+.topbar h1 { font-size: 17px; font-weight: 650; margin: 0; }
+.topbar .sub { font-size: 12px; color: var(--faint); margin-top: 1px; }
+
+.wrap { max-width: 1080px; margin: 0 auto; padding: 24px; }
+
+/* ---- 卡片 ---- */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 20px;
+}
+.card + .card { margin-top: 16px; }
+.card h2 { font-size: 15px; font-weight: 650; margin: 0 0 14px; }
+.card .hint { font-size: 13px; color: var(--muted); }
+
+/* ---- 按钮 ---- */
+.btn {
+  appearance: none; cursor: pointer; font: inherit; font-weight: 550;
+  border: 1px solid var(--border-strong);
+  background: var(--surface); color: var(--text);
+  padding: 9px 16px; border-radius: var(--radius-sm);
+  display: inline-flex; align-items: center; gap: 7px;
+  transition: background .15s, border-color .15s, transform .05s;
+}
+.btn:hover { background: var(--surface-2); }
+.btn:active { transform: translateY(1px); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn.primary:hover { background: var(--accent-press); border-color: var(--accent-press); }
+.btn.ghost { border-color: transparent; background: transparent; color: var(--muted); }
+.btn.ghost:hover { background: var(--surface-2); color: var(--text); }
+.btn.sm { padding: 6px 11px; font-size: 13px; }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+
+.icon-btn {
+  width: 36px; height: 36px; border-radius: var(--radius-sm);
+  display: grid; place-items: center; cursor: pointer;
+  border: 1px solid var(--border); background: var(--surface);
+  color: var(--muted); font-size: 16px; transition: background .15s, color .15s;
+}
+.icon-btn:hover { background: var(--surface-2); color: var(--text); }
+
+/* ---- 表单 ---- */
+input[type="text"], input[type="search"], textarea, select {
+  font: inherit; color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  padding: 9px 12px; width: 100%;
+  transition: border-color .15s, box-shadow .15s;
+}
+input:focus, textarea:focus, select:focus {
+  outline: none; border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+textarea { resize: vertical; min-height: 120px; line-height: 1.5; }
+label { font-size: 13px; color: var(--muted); display: block; margin-bottom: 6px; }
+
+/* ---- 统计条 / 横幅 ---- */
+.statbar {
+  display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
+}
+.pill {
+  display: inline-flex; align-items: baseline; gap: 6px;
+  padding: 7px 13px; border-radius: 999px;
+  background: var(--surface-2); border: 1px solid var(--border);
+  font-size: 13px; color: var(--muted);
+}
+.pill b { font-size: 15px; color: var(--text); font-weight: 650; }
+.pill.warn { background: var(--warn-soft); border-color: var(--warn); color: var(--warn); }
+.pill.warn b { color: var(--warn); }
+.pill.ok { background: var(--ok-soft); border-color: var(--ok); color: var(--ok); }
+.pill.ok b { color: var(--ok); }
+.pill.accent { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+.pill.accent b { color: var(--accent); }
+
+/* ---- 表格 ---- */
+table { width: 100%; border-collapse: collapse; }
+th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); }
+th { font-size: 12px; font-weight: 600; color: var(--faint); text-transform: none; }
+tr:last-child td { border-bottom: none; }
+td.mono, .mono { font-variant-numeric: tabular-nums;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+
+/* ---- 徽标 ---- */
+.tag {
+  display: inline-block; padding: 2px 8px; border-radius: 6px;
+  font-size: 12px; border: 1px solid var(--border);
+  background: var(--surface-2); color: var(--muted);
+}
+.tag.call { background: var(--warn-soft); border-color: var(--warn); color: var(--warn); }
+.tag.sms { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+
+/* ---- 空态 ---- */
+.empty { text-align: center; color: var(--faint); padding: 40px 16px; }
+.empty .big { font-size: 30px; opacity: .5; display: block; margin-bottom: 8px; }
+
+/* ---- 文件拖放区 ---- */
+.drop {
+  border: 1.5px dashed var(--border-strong); border-radius: var(--radius-sm);
+  padding: 16px; text-align: center; color: var(--muted); cursor: pointer;
+  transition: border-color .15s, background .15s;
+}
+.drop:hover, .drop.over { border-color: var(--accent); background: var(--accent-soft); }
+.drop .name { color: var(--text); font-weight: 550; }
+
+/* ---- 提示 toast ---- */
+.toast {
+  position: fixed; top: 18px; right: 18px; z-index: 99;
+  background: var(--surface); border: 1px solid var(--border);
+  border-left: 3px solid var(--ok);
+  border-radius: var(--radius-sm); box-shadow: 0 8px 24px rgba(0,0,0,.12);
+  padding: 12px 16px; font-size: 14px; max-width: 320px;
+  opacity: 0; transform: translateY(-8px); pointer-events: none;
+  transition: opacity .2s, transform .2s;
+}
+.toast.show { opacity: 1; transform: translateY(0); }
+
+/* ---- 页脚 ---- */
+.foot { text-align: center; color: var(--faint); font-size: 12px; padding: 28px 16px 36px; }
+
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 760px) { .grid-2 { grid-template-columns: 1fr; } .wrap { padding: 16px; } }
+
+.row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.spacer { flex: 1; }
+.muted { color: var(--muted); }
+.nowrap { white-space: nowrap; }
+
+/* 查询页专属 */
+.subject-card { border:1px solid var(--border); border-radius:var(--radius); padding:16px; }
+.subject-card + .subject-card { margin-top:12px; }
+.subject-head { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+.avatar { width:40px; height:40px; border-radius:50%; background:var(--accent-soft); color:var(--accent);
+  display:grid; place-items:center; font-size:18px; flex:none; }
+.sms-box { margin-top:12px; background:var(--surface-2); border:1px solid var(--border);
+  border-radius:var(--radius-sm); padding:10px 12px; font-size:13px; color:var(--muted); }
+.actions { display:flex; gap:8px; flex-wrap:wrap; }
+.big-search { font-size:16px; padding:12px 14px; }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand">
+    <div class="logo">🔎</div>
+    <div>
+      <h1>学生随访查询</h1>
+      <div class="sub">输入你的姓名，查看分配给你的随访任务</div>
+    </div>
+  </div>
+  <button class="icon-btn" id="themeBtn" title="切换主题">🌙</button>
+</div>
+
+<div class="wrap">
+  <div class="card">
+    <label for="who">你的姓名</label>
+    <div class="row">
+      <input type="search" id="who" class="big-search" list="studentList"
+             placeholder="例如：张伟" autocomplete="off" style="flex:1; min-width:200px">
+      <datalist id="studentList"></datalist>
+      <button class="btn primary" id="goBtn">查询</button>
+    </div>
+    <div class="statbar" style="margin-top:14px">
+      <span class="pill" id="myCount" style="display:none">我的任务 <b>0</b></span>
+      <span class="hint" id="genAt"></span>
+    </div>
+  </div>
+
+  <div class="card" id="resultCard" style="display:none">
+    <div class="row">
+      <h2 id="resultTitle" style="margin:0">随访任务</h2>
+      <span class="spacer"></span>
+      <button class="btn sm" id="copyAllPhones">复制全部电话</button>
+    </div>
+    <div id="list" style="margin-top:14px"></div>
+  </div>
+</div>
+
+<div class="foot">随访子系统 · 学生查询 · ElderAI Survey Platform</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const DATA = {"generated_at": "2026-06-13T09:50:10", "sms_template": "{姓名}您好，我是适老化调研项目的随访同学，想跟您确认一下智能手机使用问卷的回访事宜，您方便的时候请回复我，谢谢您的支持！", "students": [{"student_id": "stu_01", "student_name": "张伟", "phone": "13100000001"}, {"student_id": "stu_02", "student_name": "王芳", "phone": "13100000002"}, {"student_id": "stu_03", "student_name": "李娜", "phone": "13100000003"}, {"student_id": "stu_04", "student_name": "刘洋", "phone": "13100000004"}, {"student_id": "stu_05", "student_name": "陈静", "phone": "13100000005"}, {"student_id": "stu_06", "student_name": "杨光", "phone": "13100000006"}, {"student_id": "stu_07", "student_name": "赵敏", "phone": "13100000007"}, {"student_id": "stu_08", "student_name": "孙磊", "phone": "13100000008"}], "assignments": [{"subject_id": "sub_001", "subject_name": "王桂兰", "phone": "13943321819", "note": "行动不便", "student_id": "stu_01", "student_name": "张伟", "sms": "王桂兰您好，我是适老化调研项目的随访同学，想跟您确认一下智能手机使用问卷的回访事宜，您方便的时候请回复我，谢谢您的支持！"}, {"subject_id": "sub_002", "subject_name": "孙桂兰", "phone": "13913389083", "note": "方言较重", "student_id": "stu_02", "student_name": "王芳", "sms": "孙桂兰您好，我是适老化调研项目的随访同学，想跟您确认一下智能手机使用问卷的回访事宜，您方便的时候请回复我，谢谢您的支持！"}, {"subject_id": "sub_003", "subject_name": "严敏", "phone": "13979402654", "note": "听力不便", "student_id": "stu_03", "student_name": "李娜", "sms": "严敏您好，我是适老化调研项目的随访同学，想跟您确认一下智能手机使用问卷的回访事宜，您方便的时候请回复我，谢谢您的支持！"}, {"subject_id": "sub_004", "subject_name": "沈桂英", "phone": "13951161559", "note": "需子女陪同", "student_id": "stu_04", "student_name": "刘洋", "sms": "沈桂英您好，我是适老化调研项目的随访同学，想跟您确认一下智能手机使用问卷的回访事宜，您方便的时候请回复我，谢谢您的支持！"}, {"subject_id": "sub_005", "subject_name": "孙玉兰", "phone": "13978161849", "note": "", "student_id": "stu_05", "student_name": "陈静", "sms": "孙玉兰您好，我是适老化调研项目的随访同学，想跟您确认一下智能手机使用问卷的回访事宜，您方便的时候请回复我，谢谢您的支持！"}, {"subject_id": "sub_006", "subject_name": "张秀珍", "phone": "13931034131", "note": "行动不便", "student_id": "stu_06", "student_name": "杨光", "sms": "张秀珍您好，我是适老化调研项目的随访同学，想跟您确认一下智能手机使用问卷的回访事宜，您方便的时候请回复我，谢谢您的支持！"}, {"subject_id": "sub_007", "subject_name": "秦海燕", "phone": "13952553419", "note": "", "student_id": "stu_07", "student_name": "赵敏", "sms": "秦海燕您好，我是适老化调研项目的随访同学，想跟您确认一下智能手机使用问卷的回访事宜，您方便的时候请回复我，谢谢您的支持！"}, {"subject_id": "sub_008", "subject_name": "褚涛", "phone": "13932764835", "note": "", "student_id": "stu_08", "student_name": "孙磊", "sms": "褚涛您好，我是适老化调研项目的随访同学，想跟您确认一下智能手机使用问卷的回访事宜，您方便的时候请回复我，谢谢您的支持！"}, {"subject_id": "sub_009", "subject_name": "李敏", "phone": "13905641395", "note": "", "student_id": "stu_01", "student_name": "张伟", "sms": "李敏您好，我是适老化调研项目的随访同学，想跟您确认一下智能手机使用问卷的回访事宜，您方便的时候请回复我，谢谢您的支持！"}, {"subject_id": "sub_010", "subject_name": "姜志强", "phone": "13972423884", "note": "方言较重", "student_id": "stu_02", "student_name": "王芳", "sms": "姜志强您好，我是适老化调研项目的随访同学，想跟您确认一下智能手机使用问卷的回访事宜，您方便的时候请回复我，谢谢您的支持！"}, {"subject_id": "sub_011", "subject_name": "华秀华", "phone": "13996532871", "note": "", "student_id": "stu_03", "student_name": "李娜", "sms": "华秀华您好，我是适老化调研项目的随访同学，想跟您确认一下智能手机使用问卷的回访事宜，您方便的时候请回复我，谢谢您的支持！"}, {"subject_id": "sub_012", "subject_name": "李淑珍", "phone": "13912269166", "note": "", "student_id": "stu_04", "student_name": "刘洋", "sms": "李淑珍您好，我是适老化调研项目的随访同学，想跟您确认一下智能手机使用问卷的回访事宜，您方便的时候请回复我，谢谢您的支持！"}, {"subject_id": "sub_013", "subject_name": "魏艳", "phone": "13948018451", "note": "需子女陪同", "student_id": "stu_05", "student_name": "陈静", "sms": "魏艳您好，我是适老化调研项目的随访同学，想跟您确认一下智能手机使用问卷的回访事宜，您方便的时候请回复我，谢谢您的支持！"}, {"subject_id": "sub_014", "subject_name": "华国强", "phone": "13970482814", "note": "", "student_id": "stu_06", "student_name": "杨光", "sms": "华国强您好，我是适老化调研项目的随访同学，想跟您确认一下智能手机使用问卷的回访事宜，您方便的时候请回复我，谢谢您的支持！"}, {"subject_id": "sub_015", "subject_name": "蒋丽", "phone": "13952880957", "note": "独居", "student_id": "stu_07", "student_name": "赵敏", "sms": "蒋丽您好，我是适老化调研项目的随访同学，想跟您确认一下智能手机使用问卷的回访事宜，您方便的时候请回复我，谢谢您的支持！"}, {"subject_id": "sub_016", "subject_name": "王云", "phone": "13954303911", "note": "方言较重", "student_id": "stu_08", "student_name": "孙磊", "sms": "王云您好，我是适老化调研项目的随访同学，想跟您确认一下智能手机使用问卷的回访事宜，您方便的时候请回复我，谢谢您的支持！"}, {"subject_id": "sub_017", "subject_name": "姜婷", "phone": "13918227824", "note": "视力较弱", "student_id": "stu_01", "student_name": "张伟", "sms": "姜婷您好，我是适老化调研项目的随访同学，想跟您确认一下智能手机使用问卷的回访事宜，您方便的时候请回复我，谢谢您的支持！"}, {"subject_id": "sub_018", "subject_name": "华桂芳", "phone": "13983465787", "note": "", "student_id": "stu_02", "student_name": "王芳", "sms": "华桂芳您好，我是适老化调研项目的随访同学，想跟您确认一下智能手机使用问卷的回访事宜，您方便的时候请回复我，谢谢您的支持！"}, {"subject_id": "sub_019", "subject_name": "杨敏", "phone": "13915098393", "note": "独居", "student_id": "stu_03", "student_name": "李娜", "sms": "杨敏您好，我是适老化调研项目的随访同学，想跟您确认一下智能手机使用问卷的回访事宜，您方便的时候请回复我，谢谢您的支持！"}, {"subject_id": "sub_020", "subject_name": "周凤英", "phone": "13903105183", "note": "需子女陪同", "student_id": "stu_04", "student_name": "刘洋", "sms": "周凤英您好，我是适老化调研项目的随访同学，想跟您确认一下智能手机使用问卷的回访事宜，您方便的时候请回复我，谢谢您的支持！"}, {"subject_id": "sub_021", "subject_name": "姜桂芳", "phone": "13982997376", "note": "", "student_id": "stu_05", "student_name": "陈静", "sms": "姜桂芳您好，我是适老化调研项目的随访同学，想跟您确认一下智能手机使用问卷的回访事宜，您方便的时候请回复我，谢谢您的支持！"}, {"subject_id": "sub_022", "subject_name": "郑明", "phone": "13965667010", "note": "行动不便", "student_id": "stu_06", "student_name": "杨光", "sms": "郑明您好，我是适老化调研项目的随访同学，想跟您确认一下智能手机使用问卷的回访事宜，您方便的时候请回复我，谢谢您的支持！"}, {"subject_id": "sub_023", "subject_name": "吕俊", "phone": "13913338726", "note": "听力不便", "student_id": "stu_07", "student_name": "赵敏", "sms": "吕俊您好，我是适老化调研项目的随访同学，想跟您确认一下智能手机使用问卷的回访事宜，您方便的时候请回复我，谢谢您的支持！"}, {"subject_id": "sub_024", "subject_name": "秦海燕", "phone": "13931781080", "note": "", "student_id": "stu_08", "student_name": "孙磊", "sms": "秦海燕您好，我是适老化调研项目的随访同学，想跟您确认一下智能手机使用问卷的回访事宜，您方便的时候请回复我，谢谢您的支持！"}, {"subject_id": "sub_025", "subject_name": "杨国强", "phone": "13967736026", "note": "独居", "student_id": "stu_01", "student_name": "张伟", "sms": "杨国强您好，我是适老化调研项目的随访同学，想跟您确认一下智能手机使用问卷的回访事宜，您方便的时候请回复我，谢谢您的支持！"}, {"subject_id": "sub_026", "subject_name": "孔美娟", "phone": "13974687234", "note": "", "student_id": "stu_02", "student_name": "王芳", "sms": "孔美娟您好，我是适老化调研项目的随访同学，想跟您确认一下智能手机使用问卷的回访事宜，您方便的时候请回复我，谢谢您的支持！"}, {"subject_id": "sub_027", "subject_name": "李秀珍", "phone": "13980500978", "note": "", "student_id": "stu_03", "student_name": "李娜", "sms": "李秀珍您好，我是适老化调研项目的随访同学，想跟您确认一下智能手机使用问卷的回访事宜，您方便的时候请回复我，谢谢您的支持！"}, {"subject_id": "sub_028", "subject_name": "褚建国", "phone": "13981219136", "note": "", "student_id": "stu_04", "student_name": "刘洋", "sms": "褚建国您好，我是适老化调研项目的随访同学，想跟您确认一下智能手机使用问卷的回访事宜，您方便的时候请回复我，谢谢您的支持！"}, {"subject_id": "sub_029", "subject_name": "杨秀珍", "phone": "13990916998", "note": "", "student_id": "stu_05", "student_name": "陈静", "sms": "杨秀珍您好，我是适老化调研项目的随访同学，想跟您确认一下智能手机使用问卷的回访事宜，您方便的时候请回复我，谢谢您的支持！"}, {"subject_id": "sub_030", "subject_name": "朱桂芳", "phone": "13953462475", "note": "", "student_id": "stu_06", "student_name": "杨光", "sms": "朱桂芳您好，我是适老化调研项目的随访同学，想跟您确认一下智能手机使用问卷的回访事宜，您方便的时候请回复我，谢谢您的支持！"}, {"subject_id": "sub_031", "subject_name": "周桂兰", "phone": "13979911838", "note": "需子女陪同", "student_id": "stu_07", "student_name": "赵敏", "sms": "周桂兰您好，我是适老化调研项目的随访同学，想跟您确认一下智能手机使用问卷的回访事宜，您方便的时候请回复我，谢谢您的支持！"}, {"subject_id": "sub_032", "subject_name": "冯云", "phone": "13951354278", "note": "方言较重", "student_id": "stu_08", "student_name": "孙磊", "sms": "冯云您好，我是适老化调研项目的随访同学，想跟您确认一下智能手机使用问卷的回访事宜，您方便的时候请回复我，谢谢您的支持！"}, {"subject_id": "sub_033", "subject_name": "许刚", "phone": "13980841241", "note": "", "student_id": "stu_01", "student_name": "张伟", "sms": "许刚您好，我是适老化调研项目的随访同学，想跟您确认一下智能手机使用问卷的回访事宜，您方便的时候请回复我，谢谢您的支持！"}, {"subject_id": "sub_034", "subject_name": "陈美娟", "phone": "13949353487", "note": "需子女陪同", "student_id": "stu_02", "student_name": "王芳", "sms": "陈美娟您好，我是适老化调研项目的随访同学，想跟您确认一下智能手机使用问卷的回访事宜，您方便的时候请回复我，谢谢您的支持！"}, {"subject_id": "sub_035", "subject_name": "李秀英", "phone": "13964005242", "note": "方言较重", "student_id": "stu_03", "student_name": "李娜", "sms": "李秀英您好，我是适老化调研项目的随访同学，想跟您确认一下智能手机使用问卷的回访事宜，您方便的时候请回复我，谢谢您的支持！"}, {"subject_id": "sub_036", "subject_name": "金涛", "phone": "13968011280", "note": "", "student_id": "stu_04", "student_name": "刘洋", "sms": "金涛您好，我是适老化调研项目的随访同学，想跟您确认一下智能手机使用问卷的回访事宜，您方便的时候请回复我，谢谢您的支持！"}, {"subject_id": "sub_037", "subject_name": "张秀珍", "phone": "13982620450", "note": "", "student_id": "stu_05", "student_name": "陈静", "sms": "张秀珍您好，我是适老化调研项目的随访同学，想跟您确认一下智能手机使用问卷的回访事宜，您方便的时候请回复我，谢谢您的支持！"}, {"subject_id": "sub_038", "subject_name": "沈平", "phone": "13931586923", "note": "", "student_id": "stu_06", "student_name": "杨光", "sms": "沈平您好，我是适老化调研项目的随访同学，想跟您确认一下智能手机使用问卷的回访事宜，您方便的时候请回复我，谢谢您的支持！"}, {"subject_id": "sub_039", "subject_name": "褚俊", "phone": "13926025634", "note": "听力不便", "student_id": "stu_07", "student_name": "赵敏", "sms": "褚俊您好，我是适老化调研项目的随访同学，想跟您确认一下智能手机使用问卷的回访事宜，您方便的时候请回复我，谢谢您的支持！"}, {"subject_id": "sub_040", "subject_name": "郑志强", "phone": "13907337543", "note": "", "student_id": "stu_08", "student_name": "孙磊", "sms": "郑志强您好，我是适老化调研项目的随访同学，想跟您确认一下智能手机使用问卷的回访事宜，您方便的时候请回复我，谢谢您的支持！"}]};
+
+/* 主题 */
+const TK='followup-theme';
+function applyTheme(t){ document.documentElement.setAttribute('data-theme',t);
+  document.getElementById('themeBtn').textContent = t==='dark'?'☀️':'🌙'; localStorage.setItem(TK,t); }
+applyTheme(localStorage.getItem(TK)||'light');
+document.getElementById('themeBtn').onclick=()=>applyTheme(
+  document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark');
+
+/* 提示 */
+let tt; function toast(m){ const e=document.getElementById('toast'); e.textContent=m; e.classList.add('show');
+  clearTimeout(tt); tt=setTimeout(()=>e.classList.remove('show'),2000); }
+
+function esc(s){ return (s??'').toString().replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+/* 初始化 */
+document.getElementById('genAt').textContent = DATA.generated_at
+  ? '名单生成时间：' + DATA.generated_at.slice(0,16).replace('T',' ') : '';
+document.getElementById('studentList').innerHTML =
+  DATA.students.map(s=>`<option value="${esc(s.student_name)}">`).join('');
+
+function query(){
+  const name = document.getElementById('who').value.trim();
+  if (!name){ toast('请输入你的姓名'); return; }
+  const mine = DATA.assignments.filter(a => a.student_name === name);
+  const card = document.getElementById('resultCard');
+  const myCount = document.getElementById('myCount');
+  card.style.display = '';
+  document.getElementById('resultTitle').textContent = `${name} 的随访任务`;
+  myCount.style.display=''; myCount.querySelector('b').textContent = mine.length;
+
+  const list = document.getElementById('list');
+  if (!mine.length){
+    // 是否查无此人
+    const known = DATA.students.some(s=>s.student_name===name);
+    list.innerHTML = `<div class="empty"><span class="big">${known?'🎉':'🤔'}</span>${
+      known ? '你名下暂无随访任务' : '没有找到这个姓名，请确认与名单一致'}</div>`;
+    return;
+  }
+  list.innerHTML = mine.map(a => {
+    const tel = (a.phone||'').replace(/[^0-9+]/g,'');
+    const smsHref = `sms:${tel}?body=${encodeURIComponent(a.sms||'')}`;
+    return `
+    <div class="subject-card">
+      <div class="subject-head">
+        <div class="row" style="gap:12px">
+          <div class="avatar">👤</div>
+          <div>
+            <div style="font-weight:650; font-size:16px">${esc(a.subject_name)}</div>
+            <div class="mono muted">${esc(a.phone)}${a.note?' · '+esc(a.note):''}</div>
+          </div>
+        </div>
+        <div class="actions">
+          <a class="btn primary sm" href="tel:${tel}">📞 打电话</a>
+          <a class="btn sm" href="${smsHref}">💬 发短信</a>
+          <button class="btn ghost sm" onclick="copy('${tel}')">复制电话</button>
+        </div>
+      </div>
+      <div class="sms-box">
+        <b style="color:var(--text)">短信内容：</b> ${esc(a.sms)}
+        <button class="btn ghost sm" style="margin-left:8px" onclick='copyText(${JSON.stringify(a.sms)})'>复制短信</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+function copy(t){ copyText(t); }
+function copyText(t){ navigator.clipboard.writeText(t).then(()=>toast('已复制')).catch(()=>toast('复制失败')); }
+document.getElementById('copyAllPhones').onclick=()=>{
+  const name=document.getElementById('who').value.trim();
+  const phones=DATA.assignments.filter(a=>a.student_name===name).map(a=>a.phone).join(',');
+  copyText(phones);
+};
+document.getElementById('goBtn').onclick=query;
+document.getElementById('who').addEventListener('keydown',e=>{ if(e.key==='Enter') query(); });
+</script>
+</body>
+</html>

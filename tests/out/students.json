@@ -1,0 +1,50 @@
+[
+  {
+    "student_id": "stu_01",
+    "student_name": "张伟",
+    "phone": "13100000001",
+    "email": "zhangwei@lab.edu"
+  },
+  {
+    "student_id": "stu_02",
+    "student_name": "王芳",
+    "phone": "13100000002",
+    "email": "wangfang@lab.edu"
+  },
+  {
+    "student_id": "stu_03",
+    "student_name": "李娜",
+    "phone": "13100000003",
+    "email": "lina@lab.edu"
+  },
+  {
+    "student_id": "stu_04",
+    "student_name": "刘洋",
+    "phone": "13100000004",
+    "email": "liuyang@lab.edu"
+  },
+  {
+    "student_id": "stu_05",
+    "student_name": "陈静",
+    "phone": "13100000005",
+    "email": "chenjing@lab.edu"
+  },
+  {
+    "student_id": "stu_06",
+    "student_name": "杨光",
+    "phone": "13100000006",
+    "email": "yangguang@lab.edu"
+  },
+  {
+    "student_id": "stu_07",
+    "student_name": "赵敏",
+    "phone": "13100000007",
+    "email": "zhaomin@lab.edu"
+  },
+  {
+    "student_id": "stu_08",
+    "student_name": "孙磊",
+    "phone": "13100000008",
+    "email": "sunlei@lab.edu"
+  }
+]

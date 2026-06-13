@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>随访任务完成情况统计</title>
+<link rel="stylesheet" href="assets/theme.css">
+<style>
+  .seg { display:inline-flex; border:1px solid var(--border-strong); border-radius:var(--radius-sm); overflow:hidden; }
+  .seg button { border:none; background:var(--surface); color:var(--muted); padding:8px 16px; cursor:pointer; font:inherit; }
+  .seg button.on { background:var(--accent); color:#fff; }
+  .namechips { display:flex; flex-wrap:wrap; gap:8px; }
+  .namechip { border:1px solid var(--border); border-radius:999px; padding:5px 12px; font-size:13px; background:var(--surface); }
+  .namechip.miss { border-color:var(--warn); background:var(--warn-soft); color:var(--warn); }
+  .namechip.done { border-color:var(--ok); background:var(--ok-soft); color:var(--ok); }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand">
+    <div class="logo">✅</div>
+    <div>
+      <h1>任务完成情况统计</h1>
+      <div class="sub">粘贴接龙/群消息，自动找出谁还没发</div>
+    </div>
+  </div>
+  <button class="icon-btn" id="themeBtn" title="切换主题">🌙</button>
+</div>
+
+<div class="wrap">
+  <div class="card">
+    <div class="row">
+      <h2 style="margin:0">① 选择对照名单</h2>
+      <span class="spacer"></span>
+      <div class="seg" id="modeSeg">
+        <button data-mode="students" class="on">对照学生名单</button>
+        <button data-mode="subjects">对照受试者名单</button>
+      </div>
+    </div>
+    <p class="hint" id="modeHint" style="margin:10px 0 0">
+      在「接龙文本」里没出现的<b>学生</b>，判为「未发」。
+    </p>
+    <div class="grid-2" style="margin-top:14px">
+      <div>
+        <label>名单（每行一个姓名，或上传 CSV/JSON）</label>
+        <textarea id="roster" placeholder="张伟&#10;王芳&#10;李娜&#10;…"></textarea>
+        <div class="row" style="margin-top:8px">
+          <button class="btn ghost sm" id="uploadRoster">上传名单文件</button>
+          <input type="file" id="rosterFile" accept=".csv,.json" hidden>
+          <span class="hint" id="rosterCount">0 人</span>
+        </div>
+      </div>
+      <div>
+        <label>接龙文本（粘贴群接龙 / 聊天记录）</label>
+        <textarea id="thread" placeholder="1. 张伟 ✅ 已完成&#10;2. 王芳 完成&#10;3. 李娜&#10;…"></textarea>
+      </div>
+    </div>
+    <div class="row" style="margin-top:14px">
+      <button class="btn primary" id="analyzeBtn">分析未完成</button>
+      <button class="btn ghost sm" id="demoBtn">载入示例</button>
+    </div>
+  </div>
+
+  <div class="card" id="resultCard" style="display:none">
+    <div class="statbar">
+      <span class="pill">总人数 <b id="cTotal">0</b></span>
+      <span class="pill ok">已完成 <b id="cDone">0</b></span>
+      <span class="pill warn">未完成 <b id="cMiss">0</b></span>
+      <span class="spacer"></span>
+      <button class="btn sm" id="copyMiss">复制未完成名单</button>
+      <button class="btn sm" id="exportMiss">导出 CSV</button>
+    </div>
+
+    <h2 style="margin:18px 0 10px">未完成（<span id="missN">0</span>）</h2>
+    <div class="namechips" id="missList"></div>
+
+    <h2 style="margin:20px 0 10px">已完成（<span id="doneN">0</span>）</h2>
+    <div class="namechips" id="doneList"></div>
+  </div>
+</div>
+
+<div class="foot">随访子系统 · 完成统计 · ElderAI Survey Platform</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* 主题 */
+const TK='followup-theme';
+function applyTheme(t){ document.documentElement.setAttribute('data-theme',t);
+  document.getElementById('themeBtn').textContent=t==='dark'?'☀️':'🌙'; localStorage.setItem(TK,t); }
+applyTheme(localStorage.getItem(TK)||'light');
+document.getElementById('themeBtn').onclick=()=>applyTheme(
+  document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark');
+
+let tt; function toast(m){ const e=document.getElementById('toast'); e.textContent=m; e.classList.add('show');
+  clearTimeout(tt); tt=setTimeout(()=>e.classList.remove('show'),2000); }
+function esc(s){ return (s??'').toString().replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+let mode='students';
+document.querySelectorAll('#modeSeg button').forEach(b=>{
+  b.onclick=()=>{
+    document.querySelectorAll('#modeSeg button').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on'); mode=b.dataset.mode;
+    document.getElementById('modeHint').innerHTML =
+      `在「接龙文本」里没出现的<b>${mode==='students'?'学生':'受试者'}</b>，判为「未发」。`;
+  };
+});
+
+/* 名单解析：textarea 每行一名，或上传文件 */
+function rosterNames(){
+  return document.getElementById('roster').value.split(/\r?\n/).map(s=>s.trim()).filter(Boolean);
+}
+document.getElementById('roster').addEventListener('input',()=>{
+  document.getElementById('rosterCount').textContent = rosterNames().length + ' 人';
+});
+
+const ALIAS={student_name:1,subject_name:1,name:1,'姓名':1,'学生':1,'学生姓名':1,'受试者':1,'受试者姓名':1,'名字':1};
+function namesFromFile(text,fname){
+  let names=[];
+  if(fname.toLowerCase().endsWith('.json')){
+    const arr=JSON.parse(text);
+    names=arr.map(o=> o.student_name||o.subject_name||o.name||o['姓名']||'').filter(Boolean);
+  } else {
+    const lines=text.replace(/^﻿/,'').split(/\r?\n/).filter(l=>l.trim());
+    if(!lines.length) return [];
+    const head=lines[0].split(',').map(h=>h.trim().toLowerCase());
+    let col=head.findIndex(h=>ALIAS[h]);
+    if(col<0) col=head.findIndex(h=>h.includes('name')||h.includes('姓名'));
+    if(col<0) col=0; // 退化：取第一列
+    // 若第一行像表头则跳过
+    const hasHeader = head.some(h=>ALIAS[h]||h.includes('name')||h.includes('姓名')||h.includes('id')||h.includes('phone'));
+    names=lines.slice(hasHeader?1:0).map(l=>{
+      const cells=l.split(','); return (cells[col]||'').trim();
+    }).filter(Boolean);
+  }
+  return names;
+}
+document.getElementById('uploadRoster').onclick=()=>document.getElementById('rosterFile').click();
+document.getElementById('rosterFile').onchange=function(){
+  const f=this.files[0]; if(!f) return;
+  const r=new FileReader();
+  r.onload=()=>{ try{
+    const names=namesFromFile(r.result,f.name);
+    document.getElementById('roster').value=names.join('\n');
+    document.getElementById('rosterCount').textContent=names.length+' 人';
+    toast(`已载入 ${names.length} 人`);
+  }catch(e){ toast('解析失败：'+e.message); } };
+  r.readAsText(f,'utf-8');
+};
+
+/* 分析：名单中未出现在接龙文本里的人 = 未完成 */
+function analyze(){
+  const names=rosterNames();
+  const thread=document.getElementById('thread').value;
+  if(!names.length){ toast('请先填写名单'); return; }
+  const done=[], miss=[];
+  names.forEach(n=>{ (thread.includes(n)?done:miss).push(n); });
+
+  document.getElementById('resultCard').style.display='';
+  document.getElementById('cTotal').textContent=names.length;
+  document.getElementById('cDone').textContent=done.length;
+  document.getElementById('cMiss').textContent=miss.length;
+  document.getElementById('missN').textContent=miss.length;
+  document.getElementById('doneN').textContent=done.length;
+  document.getElementById('missList').innerHTML = miss.length
+    ? miss.map(n=>`<span class="namechip miss">${esc(n)}</span>`).join('')
+    : '<span class="hint">🎉 全部完成</span>';
+  document.getElementById('doneList').innerHTML = done.length
+    ? done.map(n=>`<span class="namechip done">${esc(n)}</span>`).join('')
+    : '<span class="hint">暂无</span>';
+  window.__miss = miss;
+}
+document.getElementById('analyzeBtn').onclick=analyze;
+
+document.getElementById('copyMiss').onclick=()=>{
+  const t=(window.__miss||[]).join('、');
+  navigator.clipboard.writeText(t).then(()=>toast('已复制未完成名单'));
+};
+document.getElementById('exportMiss').onclick=()=>{
+  const rows=[['姓名','状态'],...(window.__miss||[]).map(n=>[n,'未完成'])];
+  const csv=rows.map(r=>r.map(c=>`"${c}"`).join(',')).join('\n');
+  const blob=new Blob(['﻿'+csv],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download='未完成名单.csv'; a.click();
+};
+
+document.getElementById('demoBtn').onclick=()=>{
+  document.getElementById('roster').value=['张伟','王芳','李娜','刘洋','陈静'].join('\n');
+  document.getElementById('rosterCount').textContent='5 人';
+  document.getElementById('thread').value=
+    '接龙：随访已完成\n1. 张伟 ✅ 已完成\n2. 王芳 完成了\n3. 刘洋 ✅';
+  toast('已载入示例（张伟/王芳/刘洋已发）→ 点「分析未完成」应得 李娜、陈静');
+};
+</script>
+</body>
+</html>

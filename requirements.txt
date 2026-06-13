@@ -14,7 +14,7 @@ python-docx>=1.1.0
 # ===== 语音（可选，缺失时自动降级） =====
 pyttsx3>=2.90
 SpeechRecognition>=3.10.0
-vosk>=0.3.45
+# vosk>=0.3.45  # 暂不支持 Python 3.14，已注释
 
 # ===== 联网增强（可选） =====
 requests>=2.31.0

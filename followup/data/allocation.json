@@ -1,0 +1,129 @@
+{
+  "generated_at": "2026-06-13T09:33:40",
+  "students": [
+    {
+      "student_id": "stu_01",
+      "student_name": "张伟",
+      "phone": "13100000001"
+    },
+    {
+      "student_id": "stu_02",
+      "student_name": "王芳",
+      "phone": "13100000002"
+    },
+    {
+      "student_id": "stu_03",
+      "student_name": "李娜",
+      "phone": "13100000003"
+    },
+    {
+      "student_id": "stu_04",
+      "student_name": "刘洋",
+      "phone": "13100000004"
+    },
+    {
+      "student_id": "stu_05",
+      "student_name": "陈静",
+      "phone": "13100000005"
+    }
+  ],
+  "assignments": [
+    {
+      "subject_id": "sub_001",
+      "subject_name": "赵桂兰",
+      "phone": "13900000001",
+      "note": "独居",
+      "student_id": "stu_01",
+      "student_name": "张伟"
+    },
+    {
+      "subject_id": "sub_002",
+      "subject_name": "李建国",
+      "phone": "13900000002",
+      "note": "",
+      "student_id": "stu_02",
+      "student_name": "王芳"
+    },
+    {
+      "subject_id": "sub_003",
+      "subject_name": "孙秀英",
+      "phone": "13900000003",
+      "note": "听力不便",
+      "student_id": "stu_03",
+      "student_name": "李娜"
+    },
+    {
+      "subject_id": "sub_004",
+      "subject_name": "周明",
+      "phone": "13900000004",
+      "note": "",
+      "student_id": "stu_04",
+      "student_name": "刘洋"
+    },
+    {
+      "subject_id": "sub_005",
+      "subject_name": "吴丽",
+      "phone": "13900000005",
+      "note": "",
+      "student_id": "stu_05",
+      "student_name": "陈静"
+    },
+    {
+      "subject_id": "sub_006",
+      "subject_name": "郑国强",
+      "phone": "13900000006",
+      "note": "",
+      "student_id": "stu_01",
+      "student_name": "张伟"
+    },
+    {
+      "subject_id": "sub_007",
+      "subject_name": "王桂芳",
+      "phone": "13900000007",
+      "note": "需子女陪同",
+      "student_id": "stu_02",
+      "student_name": "王芳"
+    },
+    {
+      "subject_id": "sub_008",
+      "subject_name": "冯敏",
+      "phone": "13900000008",
+      "note": "",
+      "student_id": "stu_03",
+      "student_name": "李娜"
+    },
+    {
+      "subject_id": "sub_009",
+      "subject_name": "陈美娟",
+      "phone": "13900000009",
+      "note": "",
+      "student_id": "stu_04",
+      "student_name": "刘洋"
+    },
+    {
+      "subject_id": "sub_010",
+      "subject_name": "褚卫东",
+      "phone": "13900000010",
+      "note": "",
+      "student_id": "stu_05",
+      "student_name": "陈静"
+    },
+    {
+      "subject_id": "sub_011",
+      "subject_name": "卫红",
+      "phone": "13900000011",
+      "note": "",
+      "student_id": "stu_01",
+      "student_name": "张伟"
+    },
+    {
+      "subject_id": "sub_012",
+      "subject_name": "蒋文",
+      "phone": "13900000012",
+      "note": "",
+      "student_id": "stu_02",
+      "student_name": "王芳"
+    }
+  ],
+  "unassigned": []
+}
