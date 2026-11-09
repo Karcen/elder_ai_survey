@@ -1,0 +1,11 @@
+# Generated survey data and potentially identifying local state
+database/*.db
+database/*.sqlite*
+logs/
+backup/
+followup/data/
+__pycache__/
+*.py[cod]
+.venv/
+.idea/
+.DS_Store
