@@ -197,5 +197,13 @@ python main.py --seed [N]    # 生成N份模拟答卷 · Generate N mock respons
 ---
 
 ## 许可证 · License
-仅供适老化调研、科交会展示与教学研究使用。
-For elderly-care research, science-fair demonstration and educational use.
+
+项目代码采用 [MIT License](LICENSE)。适老化调研、教学研究和展示是项目的设计用途，并非额外的许可限制。
+
+The project code is released under the [MIT License](LICENSE). Elderly-care surveys, teaching, research, and demonstrations are intended uses, not additional license restrictions.
+
+## 数据隐私 · Data privacy
+
+实际问卷回答、参与者名单、数据库、日志和备份不应直接提交到公开仓库。仓库中已有的 `database/`、`logs/` 或 `backup/` 文件需要由维护者检查是否含个人信息；新增 `.gitignore` 不会取消对历史提交文件的跟踪。对真实参与者数据进行公开前，应先进行授权检查和去标识化处理。
+
+Do not commit real participant records, responses, databases, logs, or backups to a public repository. Review previously committed files for personal information; a new `.gitignore` does not remove previously tracked files or their Git history.
